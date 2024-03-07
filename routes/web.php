@@ -21,7 +21,21 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['admin']], function () {
+        Route::get('/create', [HomeController::class, 'create'])->name('create');
+        Route::post('/store', [HomeController::class, 'store'])->name('store');
 
+        Route::put('/update/{id}', [HomeController::class, 'update'])->name('update');
+        Route::delete('/delete', [HomeController::class, 'delete'])->name('delete');
+        Route::get('/dataAkun', [HomeController::class, 'dataAkun'])->name('dataAkun');
+        Route::get('/editAkun/{id}', [HomeController::class, 'editAkun'])->name('editAkun');
+        Route::get('/tambahAkun', [HomeController::class, 'tambahAkun'])->name('tambahAkun');
+        Route::get('/dataKlien', [HomeController::class, 'dataKlien'])->name('dataKlien');
+        Route::get('/tambahKlien', [HomeController::class, 'tambahKlien'])->name('tambahKlien');
+        Route::get('/editKlien/{id}', [HomeController::class, 'editKlien'])->name('editKlien');
+        Route::get('/dataServer', [HomeController::class, 'dataServer'])->name('dataServer');
+        Route::get('/tambahServer', [HomeController::class, 'tambahServer'])->name('tambahServer');
+        Route::get('/editServer/{id}', [HomeController::class, 'editServer'])->name('editServer');
+        Route::get('/perangkat', [HomeController::class, 'perangkat'])->name('perangkat');
     });
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 });

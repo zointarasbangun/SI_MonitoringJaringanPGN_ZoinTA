@@ -16,7 +16,7 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li id="menu-home" class="nav-item {{ request()->is('home') ? 'menu-open' : '' }}">
-                            <a href="" class="nav-link {{ request()->is('home') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard') }}" class="nav-link {{ request()->is('home') ? 'active' : '' }}">
                                 <i class="iconify nav-icon" data-icon="tabler:home"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -28,13 +28,13 @@
                             </a>
                             <ul class="nav nav-treeview" style="padding-left: 20px;">
                                 <li id="menu-tambahkan-akun" class="nav-item">
-                                    <a href="" class="nav-link">
+                                    <a href="{{ route('tambahAkun') }}" class="nav-link">
                                         <i class="iconify nav-icon ml-1" data-icon="pajamas:account"></i></i>
                                         <p>Tambahkan Akun</p>
                                     </a>
                                 </li>
                                 <li id="menu-data-akun" class="nav-item">
-                                    <a href="" class="nav-link">
+                                    <a href="{{ route('dataAkun') }}" class="nav-link">
                                         <i class="iconify nav-icon" data-icon="carbon:data-table"></i>
                                         <p>Data Akun </p>
                                     </a>
@@ -48,13 +48,13 @@
                             </a>
                             <ul class="nav nav-treeview" style="padding-left: 20px;">
                                 <li id="menu-tambah-klien" class="nav-item">
-                                    <a href="" class="nav-link">
+                                    <a href="{{ route('tambahKlien') }}" class="nav-link">
                                         <i class="iconify nav-icon ml-1" data-icon="pajamas:account"></i></i>
                                         <p>Tambah Klien</p>
                                     </a>
                                 </li>
                                 <li id="menu-data-klien" class="nav-item">
-                                    <a href="" class="nav-link">
+                                    <a href="{{ route('dataKlien') }}" class="nav-link">
                                         <i class="iconify nav-icon" data-icon="carbon:data-table"></i>
                                         <p>Data Klien</p>
                                     </a>
@@ -68,13 +68,13 @@
                             </a>
                             <ul class="nav nav-treeview" style="padding-left: 20px;">
                                 <li id="menu-tambah-server" class="nav-item">
-                                    <a href="" class="nav-link">
+                                    <a href="{{ route('tambahServer') }}" class="nav-link">
                                         <i class="iconify nav-icon ml-1" data-icon="pajamas:account"></i></i>
                                         <p>Tambah Server</p>
                                     </a>
                                 </li>
                                 <li id="menu-data-server" class="nav-item">
-                                    <a href="" class="nav-link">
+                                    <a href="{{ route('dataServer') }}" class="nav-link">
                                         <i class="iconify nav-icon" data-icon="uil:server"></i>
                                         <p>Data Server</p>
                                     </a>
@@ -83,7 +83,7 @@
                         </li>
                         <!-- Tambahan ID untuk submenu pelacak perjalanan -->
                         <li id="menu-perangkat" class="nav-item">
-                            <a href="/pelacakperjalanan" class="nav-link">
+                            <a href="{{ route('perangkat') }}" class="nav-link">
                                 <i class="iconify nav-icon" data-icon="mingcute:location-3-line"></i>
                                 <p>Perangkat</p>
                             </a>
@@ -115,24 +115,23 @@
                             </ul>
                         </li>
                         <li id="menu-log" class="nav-item">
-                            <a href="/pelacakperjalanan" class="nav-link">
+                            <a href="" class="nav-link">
                                 <i class="far fa-calendar-check nav-icon"></i>
                                 <p>Log</p>
                             </a>
                         </li>
                         <li id="menu-notifikasi"
                             class="nav-item {{ request()->is('/notifikasi') ? 'menu-open' : '' }}">
-                            <a href="/notifikasi" class="nav-link {{ request()->is('/notifikasi') ? 'active' : '' }}">
+                            <a href="" class="nav-link {{ request()->is('/notifikasi') ? 'active' : '' }}">
                                 <i class="iconify nav-icon" data-icon="mdi:bell-warning"></i>
                                 <p>Notifikasi</p>
                             </a>
                         </li>
-
-                        <li class="nav-item">
+                        <li id="menu-logout" class="nav-item">
                             <a href="{{ route('logout') }}" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                                <i class="iconify nav-icon" data-icon="material-symbols:logout"></i>
                                 <p>
-                                    logout
+                                    Logout
                                 </p>
                             </a>
                         </li>

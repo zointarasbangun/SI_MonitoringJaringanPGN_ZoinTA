@@ -11,26 +11,27 @@ use Illuminate\Support\Facades\Validator;
 class HomeController extends Controller
 {
     public function dashboard()
-{
-    if (auth()->check()) {
-        $role = auth()->user()->role;
-
-        // Menyesuaikan tampilan berdasarkan peran pengguna
-        if ($role == 'admin') {
-            return view('dashboard.admindashboard');
-        } elseif ($role == 'teknisi') {
-            return view('dashboard.teknisidashboard');
-        } elseif ($role == 'klien') {
-            return view('dashboard.kliendashboard');
-        } else {
-            // Peran lainnya, Anda dapat menyesuaikan atau menangani kasus ini sesuai kebutuhan
-            return view('dashboard');
+    {
+        if (auth()->check()) {
+            $role = auth()->user()->role;
+            $data = User::get();
+            // Menyesuaikan tampilan berdasarkan peran pengguna
+            if ($role == 'admin') {
+                return view('dashboard.admindashboard', compact('data'));
+            } elseif ($role == 'teknisi') {
+                return view('dashboard.teknisidashboard');
+            } elseif ($role == 'klien') {
+                return view('dashboard.kliendashboard');
+            } else {
+                // Peran lainnya, Anda dapat menyesuaikan atau menangani kasus ini sesuai kebutuhan
+                return view('dashboard', compact('data'));
+            }
         }
+
+        // Jika tidak terotentikasi, mungkin Anda ingin menangani sesuatu di sini, seperti menampilkan halaman login.
+        return redirect('/login');
     }
 
-    // Jika tidak terotentikasi, mungkin Anda ingin menangani sesuatu di sini, seperti menampilkan halaman login.
-    return redirect('/login');
-}
 
 
     public function index()
@@ -67,11 +68,29 @@ class HomeController extends Controller
         return redirect()->route('admin.index');
     }
 
-    public function edit(Request $request, $id)
+    public function editAkun(Request $request, $id)
     {
         $data = User::find($id);
 
-        return view('edit', compact('data'));
+        return view('admin.editAkun', compact('data'));
+    }
+    public function editServer(Request $request, $id)
+    {
+        $data = User::find($id);
+
+        return view('admin.editServer', compact('data'));
+    }
+
+    public function perangkat(){
+
+        return view('admin.perangkat');
+    }
+
+    public function editKlien(Request $request, $id)
+    {
+        $data = User::find($id);
+
+        return view('admin.editKlien', compact('data'));
     }
 
     public function update(Request $request, $id)
@@ -109,6 +128,43 @@ class HomeController extends Controller
 
         return redirect()->route('admin.index');
     }
+    public function tambahAkun()
+    {
+        $data = User::get();
+        return view('admin.tambahAkun', compact('data'));
+    }
+    public function dataAkun()
+    {
+
+        $data = User::get();
+
+        return view('admin.dataAkun', compact('data'));
+    }
+    public function tambahKlien()
+    {
+        $data = User::get();
+        return view('admin.tambahKlien', compact('data'));
+    }
+    public function dataKlien()
+    {
+
+        $data = User::get();
+
+        return view('admin.dataKlien', compact('data'));
+    }
+    public function tambahServer()
+    {
+        $data = User::get();
+        return view('admin.tambahServer', compact('data'));
+    }
+    public function dataServer()
+    {
+
+        $data = User::get();
+
+        return view('admin.dataServer', compact('data'));
+    }
+
 
     public function tesPing($alamat_ip)
     {
