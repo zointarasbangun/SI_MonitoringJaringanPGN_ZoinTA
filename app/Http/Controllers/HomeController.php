@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Monitoring;
+use App\Models\Server;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
@@ -14,14 +16,14 @@ class HomeController extends Controller
     {
         if (auth()->check()) {
             $role = auth()->user()->role;
-            $data = User::get();
+            $data = User::whereNot('role', 'admin')->whereNot('role', 'teknisi')->get();
             // Menyesuaikan tampilan berdasarkan peran pengguna
             if ($role == 'admin') {
                 return view('dashboard.admindashboard', compact('data'));
             } elseif ($role == 'teknisi') {
-                return view('dashboard.teknisidashboard');
+                return view('dashboard.teknisidashboard', compact('data'));
             } elseif ($role == 'klien') {
-                return view('dashboard.kliendashboard');
+                return view('dashboard.kliendashboard', compact('data'));
             } else {
                 // Peran lainnya, Anda dapat menyesuaikan atau menangani kasus ini sesuai kebutuhan
                 return view('dashboard', compact('data'));
@@ -32,139 +34,139 @@ class HomeController extends Controller
         return redirect('/login');
     }
 
-
-
-    public function index()
-    {
-
-        $data = User::get();
-
-        return view('index', compact('data'));
-    }
-
-    public function create()
-    {
-        return view('create');
-    }
-
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'nama' => 'required',
-            'password' => 'required',
-            'role' => 'required'
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+            'kontak' => 'nullable',
+            'alamat' => 'nullable',
+            'latitude' => 'nullable',
+            'longitude' => 'nullable',
+            'tahun_langganan' => 'nullable',
+            'server_id' => 'nullable',
+            'role' => 'nullable',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        if ($validator->fails())
-            return redirect()->back()->withInput()->withErrors($validator);
+        if ($request->hasFile('image')) {
+            $photoPath = $request->file('image')->store('photos', 'public');
+            $validatedData['image'] = $photoPath;
+        }
 
-        $data['email'] = $request->email;
-        $data['name'] = $request->nama;
-        $data['password'] = Hash::make($request->password);
-        $data['role'] = $request->role;
-        User::create($data);
+        // Buat array untuk data pengguna baru
+        $userData = [
+            'email' => $validatedData['email'],
+            'name' => $validatedData['name'],
+            'password' => Hash::make($validatedData['password']),
+        ];
 
-        return redirect()->route('admin.index');
+        // Tambahkan data lainnya ke dalam array data pengguna baru
+        $userData['kontak'] = $validatedData['kontak'] ?? null;
+        $userData['alamat'] = $validatedData['alamat'] ?? null;
+        $userData['tahun_langganan'] = $validatedData['tahun_langganan'] ?? null;
+        $userData['latitude'] = $validatedData['latitude'] ?? null;
+        $userData['longitude'] = $validatedData['longitude'] ?? null;
+        $userData['server_id'] = $validatedData['server_id'] ?? null;
+        $userData['role'] = $validatedData['role'] ?? null;
+        $userData['image'] = $validatedData['image'] ?? null;
+
+        // Membuat pengguna baru
+        $user = User::create($userData);
+        // Redirect ke halaman dataAkun setelah penyimpanan berhasil
+        return redirect()->route('dataAkun');
     }
+
+
+
 
     public function editAkun(Request $request, $id)
     {
-        $data = User::find($id);
+        // Cek apakah user dengan ID yang diberikan ada dalam database
+        $user = User::findOrFail($id);
 
-        return view('admin.editAkun', compact('data'));
-    }
-    public function editServer(Request $request, $id)
-    {
-        $data = User::find($id);
+        $server = Server::get();
 
-        return view('admin.editServer', compact('data'));
-    }
-
-    public function perangkat(){
-
-        return view('admin.perangkat');
-    }
-
-    public function editKlien(Request $request, $id)
-    {
-        $data = User::find($id);
-
-        return view('admin.editKlien', compact('data'));
+        // Mengembalikan view 'admin.editAkun' dan menyertakan data user
+        return view('account.editAkun', compact('user', 'server'));
     }
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'nama' => 'required',
-            'password' => 'nullable',
-            'role' => 'required'
+        $validatedData = $request->validate([
+            'name' => 'nullable',
+            'email' => 'nullable|email',
+            'password' => 'nullable|min:6',
+            'kontak' => 'nullable',
+            'alamat' => 'nullable',
+            'tahun_langganan' => 'nullable',
+            'server_id' => 'nullable',
+            'latitude' => 'nullable',
+            'longitude' => 'nullable',
+            'status' => 'nullable',
+            'role' => 'nullable',
+            'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
         ]);
 
-        if ($validator->fails())
-            return redirect()->back()->withInput()->withErrors($validator);
+        $user = User::findOrFail($id);
 
-        $data['email'] = $request->email;
-        $data['name'] = $request->nama;
-        $data['role'] = $request->role;
+        // Jika ada file gambar yang diunggah, proses dan simpan
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($user->image) {
+                Storage::disk('public')->delete($user->image);
+            }
 
+            // Simpan gambar baru
+            $photoPath = $request->file('image')->store('photos', 'public');
+            $validatedData['image'] = $photoPath;
+        }
+
+        if (empty($request->password)) {
+            unset($validatedData['password']);
+        }
+
+        if (empty($request->status)) {
+            unset($validatedData['status']);
+        }
+
+        // Update data pengguna
+        $user->update($validatedData);
+
+        // Jika ada perubahan pada password, hash dan simpan
         if ($request->password) {
-            $data['password'] = Hash::make($request->password);
+            $user->password = Hash::make($request->password);
+            $user->save();
         }
 
-        User::whereId($id)->update($data);
-
-        return redirect()->route('admin.index');
+        return redirect()->route('dataAkun')->with('success', 'Data pengguna diperbarui.');
     }
 
-    public function delete(Request $request, $id)
+
+    public function destroy(string $id)
     {
-        $data = User::find($id);
+        $data = User::findOrFail($id);
+        $data->delete();
 
-        if ($data) {
-            $data->delete();
-        }
-
-        return redirect()->route('admin.index');
+        return redirect()->route('dataAkun');
     }
+
     public function tambahAkun()
     {
         $data = User::get();
-        return view('admin.tambahAkun', compact('data'));
+        return view('account.tambahAkun', compact('data'));
     }
     public function dataAkun()
     {
 
-        $data = User::get();
+        $user = User::whereNot('role', 'admin')->get();
 
-        return view('admin.dataAkun', compact('data'));
+        $server = Server::get();
+
+        // Mengembalikan view 'admin.editAkun' dan menyertakan data user
+        return view('account.dataAkun', compact('user', 'server'));
     }
-    public function tambahKlien()
-    {
-        $data = User::get();
-        return view('admin.tambahKlien', compact('data'));
-    }
-    public function dataKlien()
-    {
-
-        $data = User::get();
-
-        return view('admin.dataKlien', compact('data'));
-    }
-    public function tambahServer()
-    {
-        $data = User::get();
-        return view('admin.tambahServer', compact('data'));
-    }
-    public function dataServer()
-    {
-
-        $data = User::get();
-
-        return view('admin.dataServer', compact('data'));
-    }
-
 
     public function tesPing($alamat_ip)
     {

@@ -1,89 +1,48 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="" class="brand-link">
-        <img src="{{ asset('img/pgncomlogo.png') }}" style="opacity: .8" alt="User Image">
+        <img src="{{ asset('img/logopgn1.png') }}" style="opacity: 1" alt="User Image" width="220">
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
-        <div class="mt-3 pb-3 mb-3 d-flex">
 
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
 
             <!-- Sidebar Menu -->
             @if (Auth::user()->role == 'admin')
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
-                        <li id="menu-home" class="nav-item {{ request()->is('home') ? 'menu-open' : '' }}">
-                            <a href="{{ route('dashboard') }}" class="nav-link {{ request()->is('home') ? 'active' : '' }}">
+                        <li id="menu-home" class="nav-item {{ request()->is('dashboard') ? 'menu-open' : '' }}">
+                            <a href="{{ route('dashboard') }}"
+                                class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
                                 <i class="iconify nav-icon" data-icon="tabler:home"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
-                        <li id="menu-acount" class="nav-item {{ request()->is('acount') ? 'menu-open' : '' }}">
-                            <a href="" class="nav-link {{ request()->is('acount') ? 'active' : '' }}">
+                        <li id="menu-acount" class="nav-item {{ request()->is('dataAkun') ? 'menu-open' : '' }}">
+                            <a href="{{ route('dataAkun') }}"
+                                class="nav-link {{ request()->is('dataAkun') ? 'active' : '' }}">
                                 <i class="iconify nav-icon ml-1" data-icon="pajamas:account"></i>
-                                <p>Kelola Akun <i class="right fas fa-angle-left"></i></p>
+                                <p>Kelola Akun</p>
                             </a>
-                            <ul class="nav nav-treeview" style="padding-left: 20px;">
-                                <li id="menu-tambahkan-akun" class="nav-item">
-                                    <a href="{{ route('tambahAkun') }}" class="nav-link">
-                                        <i class="iconify nav-icon ml-1" data-icon="pajamas:account"></i></i>
-                                        <p>Tambahkan Akun</p>
-                                    </a>
-                                </li>
-                                <li id="menu-data-akun" class="nav-item">
-                                    <a href="{{ route('dataAkun') }}" class="nav-link">
-                                        <i class="iconify nav-icon" data-icon="carbon:data-table"></i>
-                                        <p>Data Akun </p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
-                        <li id="menu-kelola-klien" class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="iconify nav-icon" data-icon="tdesign:data"></i>
-                                <p>Kelola Klien <i class="right fas fa-angle-left"></i></p>
+                        <li id="menu-acount" class="nav-item {{ request()->is('dataKlien') ? 'menu-open' : '' }}">
+                            <a href="{{ route('dataKlien') }}" class="nav-link ">
+                                <i class="iconify nav-icon" data-icon="fa6-solid:users"></i>
+                                <p>Kelola Klien</p>
                             </a>
-                            <ul class="nav nav-treeview" style="padding-left: 20px;">
-                                <li id="menu-tambah-klien" class="nav-item">
-                                    <a href="{{ route('tambahKlien') }}" class="nav-link">
-                                        <i class="iconify nav-icon ml-1" data-icon="pajamas:account"></i></i>
-                                        <p>Tambah Klien</p>
-                                    </a>
-                                </li>
-                                <li id="menu-data-klien" class="nav-item">
-                                    <a href="{{ route('dataKlien') }}" class="nav-link">
-                                        <i class="iconify nav-icon" data-icon="carbon:data-table"></i>
-                                        <p>Data Klien</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
-                        <li id="menu-server" class="nav-item">
-                            <a href="#" class="nav-link">
+                        <li id="menu-data-server" class="nav-item">
+                            <a href="{{ route('dataServer') }}" class="nav-link">
                                 <i class="iconify nav-icon" data-icon="uil:server"></i>
-                                <p>Server<i class="right fas fa-angle-left"></i></p>
+                                <p>Server</p>
                             </a>
-                            <ul class="nav nav-treeview" style="padding-left: 20px;">
-                                <li id="menu-tambah-server" class="nav-item">
-                                    <a href="{{ route('tambahServer') }}" class="nav-link">
-                                        <i class="iconify nav-icon ml-1" data-icon="pajamas:account"></i></i>
-                                        <p>Tambah Server</p>
-                                    </a>
-                                </li>
-                                <li id="menu-data-server" class="nav-item">
-                                    <a href="{{ route('dataServer') }}" class="nav-link">
-                                        <i class="iconify nav-icon" data-icon="uil:server"></i>
-                                        <p>Data Server</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
-                        <!-- Tambahan ID untuk submenu pelacak perjalanan -->
-                        <li id="menu-perangkat" class="nav-item">
-                            <a href="{{ route('perangkat') }}" class="nav-link">
+                        <li id="menu-acount" class="nav-item {{ request()->is('') ? 'menu-open' : '' }}">
+                            <a href="{{ route('dataDevice') }}" class="nav-link ">
                                 <i class="iconify nav-icon" data-icon="mingcute:location-3-line"></i>
                                 <p>Perangkat</p>
                             </a>
@@ -95,34 +54,47 @@
                             </a>
                             <ul class="nav nav-treeview" style="padding-left: 20px;">
                                 <li id="menu-klien" class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="iconify nav-icon" data-icon="tdesign:data"></i>
+                                    <a href="{{ route('klienlokasi') }}" class="nav-link">
+                                        <i class="iconify nav-icon" data-icon="fa6-solid:users"></i>
                                         <p>Klien</p>
                                     </a>
                                 </li>
                                 <li id="menu-server" class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="iconify nav-icon" data-icon="prime:server"></i>
+                                    <a href="{{ route('serverlokasi') }}" class="nav-link">
+                                        <i class="iconify nav-icon" data-icon="uil:server"></i>
                                         <p>Server</p>
                                     </a>
                                 </li>
                                 <li id="menu-perangkat" class="nav-item">
-                                    <a href="" class="nav-link">
+                                    <a href="{{ route('monitoringlokasi') }}" class="nav-link">
                                         <i class="iconify nav-icon" data-icon="mingcute:location-3-line"></i>
                                         <p>Perangkat</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li id="menu-log" class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-calendar-check nav-icon"></i>
-                                <p>Log</p>
+                        <li id="menu-perjalanan" class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="iconify nav-icon" data-icon="tdesign:data"></i>
+                                <p>Log <i class="right fas fa-angle-left"></i></p>
                             </a>
+                            <ul class="nav nav-treeview" style="padding-left: 20px;">
+                                <li id="menu-data-perjalanan" class="nav-item">
+                                    <a href="{{ route('datalog') }}" class="nav-link">
+                                        <i class="iconify nav-icon" data-icon="carbon:data-table"></i>
+                                        <p>Data Log</p>
+                                    </a>
+                                </li>
+                                <li id="menu-status-perjalanan" class="nav-item">
+                                    <a href="" class="nav-link">
+                                        <i class="far fa-calendar-check nav-icon"></i>
+                                        <p>Status Log</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        <li id="menu-notifikasi"
-                            class="nav-item {{ request()->is('/notifikasi') ? 'menu-open' : '' }}">
-                            <a href="" class="nav-link {{ request()->is('/notifikasi') ? 'active' : '' }}">
+                        <li id="menu-notifikasi" class="nav-item ">
+                            <a href="/notifikasi" class="nav-link ">
                                 <i class="iconify nav-icon" data-icon="mdi:bell-warning"></i>
                                 <p>Notifikasi</p>
                             </a>
@@ -136,132 +108,158 @@
                             </a>
                         </li>
                     </ul>
+
+                </nav>
+            @elseif (Auth::user()->role == 'teknisi')
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
+                        <li id="menu-home" class="nav-item {{ request()->is('dashboard') ? 'menu-open' : '' }}">
+                            <a href="{{ route('dashboard') }}"
+                                class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
+                                <i class="iconify nav-icon" data-icon="tabler:home"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li id="menu-acount" class="nav-item {{ request()->is('') ? 'menu-open' : '' }}">
+                            <a href="{{ route('teknisi.dataKlien') }}" class="nav-link ">
+                                <i class="iconify nav-icon" data-icon="fa6-solid:users"></i>
+                                <p>Kelola Klien</p>
+                            </a>
+                        </li>
+                        <li id="menu-data-server" class="nav-item">
+                            <a href="{{ route('teknisi.dataServer') }}" class="nav-link">
+                                <i class="iconify nav-icon" data-icon="uil:server"></i>
+                                <p>Server</p>
+                            </a>
+                        </li>
+                        <li id="menu-acount" class="nav-item {{ request()->is('') ? 'menu-open' : '' }}">
+                            <a href="{{ route('teknisi.dataDevice') }}" class="nav-link ">
+                                <i class="iconify nav-icon" data-icon="mingcute:location-3-line"></i>
+                                <p>Perangkat</p>
+                            </a>
+                        </li>
+                        <li id="menu-lokasi" class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="iconify nav-icon" data-icon="grommet-icons:location"></i>
+                                <p>Lokasi<i class="fas fa-angle-left right"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview" style="padding-left: 20px;">
+                                <li id="menu-klien" class="nav-item">
+                                    <a href="{{ route('teknisi.klienlokasi') }}" class="nav-link">
+                                        <i class="iconify nav-icon" data-icon="fa6-solid:users"></i>
+                                        <p>Klien</p>
+                                    </a>
+                                </li>
+                                <li id="menu-server" class="nav-item">
+                                    <a href="{{ route('teknisi.serverlokasi') }}" class="nav-link">
+                                        <i class="iconify nav-icon" data-icon="uil:server"></i>
+                                        <p>Server</p>
+                                    </a>
+                                </li>
+                                <li id="menu-perangkat" class="nav-item">
+                                    <a href="{{ route('teknisi.monitoringlokasi') }}" class="nav-link">
+                                        <i class="iconify nav-icon" data-icon="mingcute:location-3-line"></i>
+                                        <p>Perangkat</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li id="menu-perjalanan" class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="iconify nav-icon" data-icon="tdesign:data"></i>
+                                <p>Log <i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview" style="padding-left: 20px;">
+                                <li id="menu-data-perjalanan" class="nav-item">
+                                    <a href="{{ route('teknisi.datalog') }}" class="nav-link">
+                                        <i class="iconify nav-icon" data-icon="carbon:data-table"></i>
+                                        <p>Data Log</p>
+                                    </a>
+                                </li>
+                                <li id="menu-status-perjalanan" class="nav-item">
+                                    <a href="" class="nav-link">
+                                        <i class="far fa-calendar-check nav-icon"></i>
+                                        <p>Status Log</p>
+                                    </a>
+                                </li>
+                                <li id="menu-status-perjalanan" class="nav-item">
+                                    <a href="" class="nav-link">
+                                        <i class="fa-solid fa-clock-rotate-left nav-icon"></i>
+                                        <p>Riwayat Log</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li id="menu-notifikasi" class="nav-item ">
+                            <a href="/notifikasi" class="nav-link ">
+                                <i class="iconify nav-icon" data-icon="mdi:bell-warning"></i>
+                                <p>Notifikasi</p>
+                            </a>
+                        </li>
+                        <li id="menu-logout" class="nav-item">
+                            <a href="{{ route('logout') }}" class="nav-link">
+                                <i class="iconify nav-icon" data-icon="material-symbols:logout"></i>
+                                <p>
+                                    Logout
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+
                 </nav>
             @else
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
-
-                        <li class="nav-item menu-open">
-                            <a href="" class="nav-link ">
+                        <li id="menu-home" class="nav-item {{ request()->is('dashboard') ? 'menu-open' : '' }}">
+                            <a href="{{ route('dashboard') }}"
+                                class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
                                 <i class="iconify nav-icon" data-icon="tabler:home"></i>
-                                <p>
-                                    Beranda
-                                </p>
+                                <p>Dashboard</p>
                             </a>
-                            {{-- <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="iconify nav-icon ml-1" data-icon="pajamas:account"></i>
-                            <p>
-                                Kelola Akun
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview" style="padding-left: 20px;">
-                            <li class="nav-item">
-                                <a href="{{ route('createAcount') }}" class="nav-link">
-                                    <!-- Tambahkan URL yang sesuai di sini -->
-                                    <i class="iconify nav-icon" data-icon="line-md:account-add"></i>
-                                    <p>Tambahkan Akun</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('acount.index') }}" class="nav-link">
-                                    <!-- Tambahkan URL yang sesuai di sini -->
-                                    <i class="iconify nav-icon" data-icon="gg:list"></i>
-                                    <p>Data Akun</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li> --}}
-
-                        <li class="nav-item">
+                        </li>
+                        <li id="menu-acount" class="nav-item {{ request()->is('') ? 'menu-open' : '' }}">
+                            <a href="" class="nav-link ">
+                                <i class="iconify nav-icon" data-icon="mingcute:location-3-line"></i>
+                                <p>Perangkat</p>
+                            </a>
+                        </li>
+                        <li id="menu-acount" class="nav-item {{ request()->is('') ? 'menu-open' : '' }}">
+                            <a href="" class="nav-link ">
+                                <i class="iconify nav-icon" data-icon="grommet-icons:location"></i>
+                                <p>Lokasi</p>
+                            </a>
+                        </li>
+                        <li id="menu-perjalanan" class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="iconify nav-icon" data-icon="tdesign:data"></i>
-                                <p>
-                                    Perjalanan
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview" style="padding-left: 20px;">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="iconify nav-icon" data-icon="carbon:data-table"></i>
-                                        <p>Data Perjalanan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="far fa-calendar-check nav-icon"></i>
-                                        <p>Tambah Data Perjalanan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="far fa-calendar-check nav-icon"></i>
-                                        <p>Status Perjalanan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="far fa-calendar-check nav-icon"></i>
-                                        <p>Riwayat Perjalanan saya</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/pelacakPerjalananUser" class="nav-link">
-                                <i class="iconify nav-icon" data-icon="arcticons:vtracking"></i>
-                                <p>
-                                    Pelacak Perjalanan
-                                </p>
+                                <p>Log</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="iconify nav-icon" data-icon="tabler:checkup-list"></i>
-                                <p>
-                                    Kondisi Kendaraan
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview" style="padding-left: 20px;">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="iconify nav-icon" data-icon="carbon:vehicle-services"></i>
-                                        <p> Kendaraan saya</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="iconify nav-icon" data-icon="mdi:car"></i>
-                                        <p>Data Kondisi Kendaraan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/tipeKendaraanUser" class="nav-link">
-                                        <i class="iconify nav-icon" data-icon="mdi:car"></i>
-                                        <p>Tipe Kendaraan</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/notifikasiUser" class="nav-link">
+                        <li id="menu-notifikasi" class="nav-item ">
+                            <a href="/notifikasi" class="nav-link ">
                                 <i class="iconify nav-icon" data-icon="mdi:bell-warning"></i>
+                                <p>Notifikasi</p>
+                            </a>
+                        </li>
+                        <li id="menu-logout" class="nav-item">
+                            <a href="{{ route('logout') }}" class="nav-link">
+                                <i class="iconify nav-icon" data-icon="material-symbols:logout"></i>
                                 <p>
-                                    Notifikasi
+                                    Logout
                                 </p>
                             </a>
                         </li>
-
                     </ul>
+
                 </nav>
             @endif
             <!-- /.sidebar-menu -->
         </div>
-        <!-- /.sidebar -->
+
+    </div>
+    <!-- /.sidebar -->
 </aside>
 
 <script>

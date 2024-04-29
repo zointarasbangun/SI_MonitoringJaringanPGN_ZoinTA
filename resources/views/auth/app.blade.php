@@ -68,8 +68,8 @@
     }
 
     .btn-primary {
-        background-color: #12ACED;
-        border-color: #12ACED;
+        background-color: #1265A8;
+        border-color: #1265A8;
         padding: 12px 20px;
         font-size: 16px;
         border-radius: 5px;
@@ -94,7 +94,7 @@
     }
 
     .text-center a {
-        color: #007bff;
+        color: #1265A8;
     }
 
     .img-container {
@@ -114,7 +114,7 @@
     }
 </style>
 
-<body class="hold-transition login-page" style="background: #00ABEC">
+<body class="hold-transition login-page" >
 
 @yield('content')
 

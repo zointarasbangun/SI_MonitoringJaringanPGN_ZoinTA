@@ -69,28 +69,39 @@
         }
 
         .sidebar-dark-primary {
-            background-color: #2F475D;
+            background-color: #0A3C65;
         }
 
         .sidebar-dark-primary .nav-sidebar .nav-item .nav-link.active {
-            background-color: #2F475D;
+            background-color: #132a40;
         }
 
         .sidebar-dark-primary .nav-sidebar .nav-item .nav-link.active:hover {
-            background-color: #2F475D;
+            background-color: #132a40;
         }
 
         .sidebar-dark-primary .nav-sidebar .nav-item .nav-link:hover {
-            background-color: #2F475D;
+            background-color: #132a40;
         }
 
         .sidebar-dark-primary .brand-link {
-            background-color: #2F475D;
+            background-color: #0A3C65;
             border-bottom: 0;
         }
 
         .sidebar-dark-primary .brand-link:hover {
-            background-color: #2F475D;
+            background-color: #132a40;
+        }
+
+        .logout-container {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .modal-body {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
         }
     </style>
 
@@ -120,21 +131,21 @@
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto ">
-                @if (Auth::user()->role == 'admin')
-                    <!-- Notif -->
-                    <li class="nav-item dropdown mr-4">
-                        <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
-                            <i class="far fa-bell"></i>
-                            <span class="badge badge-warning ">15</span>
+
+                <!-- Notif -->
+                <li class="nav-item dropdown mr-4">
+                    <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell"></i>
+                        <span class="badge badge-warning ">15</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        {{-- <span class="dropdown-item dropdown-header disabled ">15 Notifications</span> --}}
+                        <div class="dropdown-divider"></div>
+                        <a href="/notifikasi" class="dropdown-item">
+                            <i class="fas fa-envelope mr-2"></i> 4 new messages
+                            <span class="float-right text-muted text-sm">3 mins</span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            {{-- <span class="dropdown-item dropdown-header disabled ">15 Notifications</span> --}}
-                            <div class="dropdown-divider"></div>
-                            <a href="/notifikasi" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> 4 new messages
-                                <span class="float-right text-muted text-sm">3 mins</span>
-                            </a>
-                            {{-- <div class="dropdown-divider"></div>
+                        {{-- <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
                             <i class="fas fa-users mr-2"></i> 8 friend requests
                             <span class="float-right text-muted text-sm">12 hours</span>
@@ -146,104 +157,41 @@
                         </a>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a> --}}
-                        </div>
-                    </li>
-                    <!-- /Notif -->
+                    </div>
+                </li>
+                <!-- /Notif -->
 
-                    <!-- Profile -->
-                    <li class="nav-item dropdown">
-                        <a data-toggle="dropdown" href="#">
-                            <img src="{{ URL('img/avatar.png') }}" class="img-circle elevation-2"
-                                alt="User Image" width="40" height="40">
-                        </a>
+                <!-- Profile -->
+                <li class="nav-item dropdown">
+                    <a data-toggle="dropdown" href="#">
+                        <img src="{{ URL('img/avatar.png') }}" class="img-circle elevation-2" alt="User Image"
+                            width="40" height="40">
+                    </a>
 
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            {{-- <div class="dropdown-divider"></div> --}}
-                            <p class="dropdown-item dropdown-footer disabled ">Admin</p>
-                            {{-- <div class="dropdown-divider"></div> --}}
-                            <a href=" " class="dropdown-item dropdown-footer"><i
-                                    class="far fa-user mx-2"></i>Lihat
-                                Profil</a>
-                            {{-- <div class="dropdown-divider"></div> --}}
-                            <div>
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        {{-- <div class="dropdown-divider"></div> --}}
+                        <p class="dropdown-item dropdown-footer disabled ">Admin</p>
+                        {{-- <div class="dropdown-divider"></div> --}}
+                        <a href="" class="dropdown-item dropdown-footer"><i class="far fa-user mx-2"></i>Lihat
+                            Profil</a>
+                        {{-- <div class="dropdown-divider"></div> --}}
+                        <div>
+                            <a class="dropdown-item" href=""
+                                onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-
-                            </div>
-                        </div>
-
-                    </li>
-                    <!-- /Profile -->
-                @else
-                    <!-- Notif -->
-                    <li class="nav-item dropdown mr-4">
-                        <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
-                            <i class="far fa-bell"></i>
-                            <span class="badge badge-warning ">15</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            {{-- <span class="dropdown-item dropdown-header disabled ">15 Notifications</span> --}}
-                            <div class="dropdown-divider"></div>
-                            <a href="/notifikasiUser" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> 4 new messages
-                                <span class="float-right text-muted text-sm">3 mins</span>
+                                {{ __('Logout') }}
                             </a>
-                            {{-- <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i> 8 friend requests
-                            <span class="float-right text-muted text-sm">12 hours</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-file mr-2"></i> 3 new reports
-                            <span class="float-right text-muted text-sm">2 days</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a> --}}
+
+                            <form id="logout-form" action="" method="POST" class="d-none">
+                                @csrf
+                            </form>
+
                         </div>
-                    </li>
-                    <!-- /Notif -->
+                    </div>
 
-                    <!-- Profile -->
-                    <li class="nav-item dropdown">
-                        <a data-toggle="dropdown" href="#">
-                            <img src="{{ URL('img/photoprofil.png') }}" class="img-circle elevation-2"
-                                alt="User Image">
-                        </a>
+                </li>
 
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            {{-- <div class="dropdown-divider"></div> --}}
-                            <p class="dropdown-item dropdown-footer disabled ">Driver</p>
-                            {{-- <div class="dropdown-divider"></div> --}}
-                            <a href="" class="dropdown-item dropdown-footer"><i
-                                    class="far fa-user mx-2"></i>Lihat
-                                Profil</a>
-                            {{-- <div class="dropdown-divider"></div> --}}
-                            <div>
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                                 document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                    class="d-none">
-                                    @csrf
-                                </form>
-
-                            </div>
-                        </div>
-
-                    </li>
             </ul>
-            @endif
 
         </nav>
 
@@ -251,7 +199,15 @@
 
         @yield('content')
 
+
     </div>
+    <footer class="main-footer">
+        <strong>Copyright &copy; 2024-2029 <a href="https://adminlte.io">PGNCOM LAMPUNG</a>.</strong>
+        All rights reserved.
+        <div class="float-right d-none d-sm-inline-block">
+            <b>Version</b> 3.2.0
+        </div>
+    </footer>
     <!-- ./wrapper -->
 
     <script src="{{ asset('js/admintable.js') }}"></script>
@@ -292,6 +248,12 @@
 
     <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
         crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
 
     <script src="{{ asset('/sw.js') }}"></script>
     <script>

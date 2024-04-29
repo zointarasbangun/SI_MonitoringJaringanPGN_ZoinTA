@@ -1,75 +1,85 @@
 @extends('layouts.app')
 @section('content')
-    <div class="content-wrapper">
-        <div class="card" style="background:#1265A8" padding:10px;">
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-2" style="color:white">Admin</h1>
-                        </div><!-- /.col -->
-                    </div>
-                </div>
-                <!-- /.content-header -->
+    <style>
+        .small-box {
+            border-radius: 10px;
+        }
 
-                <!-- Main content -->
-                <section class="content">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class=" mr-5 col-lg-2 col-1"">
-                                <!-- small box -->
-                                <div class=" small-box bg-white" style="font-weight: bold;">
-                                    <div class="inner">
-                                        <h6
-                                            style="vertical-align: middle; margin-right: 10px; color:#1265A8;  text-align:center">
-                                            Total Server</h6>
-                                        <p style="font-size: 36px; color:#1265A8; text-align:center">2</p>
-                                        <a href="#" class="small-box-footer"></i></a>
+        .carousel-item img {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Tambahkan gaya berikut untuk mengatur lebar gambar pada tampilan kecil */
+        @media (max-width: 767px) {
+            .carousel-item img {
+                width: 100%;
+            }
+        }
+    </style>
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 connectedSortable"
+                    style="margin-bottom : 20px; background-color: #1265A8; color: #fff;">
+                    <h3 style="margin-top: 30px; margin-left: 30px; font-weight: bold;">Admin</h3>
+                    <div class="container fluid">
+                        <div class="row d-flex justify-content-around">
+                            <div class="col-lg-3 col-md-6">
+                                <div class="small-box bg-white text-center d-flex flex-column "
+                                    style="font-weight: bold; padding: 20px;">
+                                    <div class="d-flex align-items-center justify-content-end mb-3">
+                                        <h4 style="margin-bottom: 0; color: #1265A8;">Total Server</h4>
+                                        <i class="iconify nav-icon ml-auto" data-icon="uil:server"
+                                            style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
+                                    <p style="font-size: 36px;color: #1265A8;">
+                                        11</p>
                                 </div>
                             </div>
-                            <!-- ./col -->
-                            <div class="mr-5 col-lg-2 col-1 mr-2">
-                                <!-- small box -->
-                                <div class="small-box bg-white" style="font-weight: bold;">
-                                    <div class="inner">
-                                        <h6
-                                            style="vertical-align: middle; margin-right: 10px; color:#1265A8;  text-align:center">
-                                            Total Klien</h6>
-                                        <p style="font-size: 36px; color:#1265A8; text-align:center">2</p>
-                                        <a href="#" class="small-box-footer"></i></a>
+
+                            <div class="col-lg-3 col-md-6">
+                                <div class="small-box bg-white text-center d-flex flex-column "
+                                    style="font-weight: bold; padding: 20px;">
+                                    <div class="d-flex align-items-center justify-content-end mb-3">
+                                        <h4 style="margin-bottom: 0;color: #1265A8;">Total Klien</h4>
+                                        <i class="iconify nav-icon ml-auto" data-icon="fa6-solid:users"
+                                            style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
+                                    <p style="font-size: 36px;color: #1265A8;">
+                                        11</p>
                                 </div>
                             </div>
-                            <!-- ./col -->
-                            <div class="mr-5 col-lg-2 col-1 mr-2">
-                                <!-- small box -->
-                                <div class="small-box bg-white" style="font-weight: bold;">
-                                    <div class="inner">
-                                        <h6
-                                            style="vertical-align: middle; margin-right: 10px; color:#1265A8;  text-align:center">
-                                            Total Perangkat</h6>
-                                        <p style="font-size: 36px; color:#1265A8; text-align:center">2</p>
-                                        <a href="#" class="small-box-footer"></i></a>
+
+                            <div class="col-lg-3 col-md-6">
+                                <div class="small-box bg-white text-center d-flex flex-column "
+                                    style="font-weight: bold; padding: 20px;">
+                                    <div class="d-flex align-items-center justify-content-end mb-3">
+                                        <h4 style="margin-bottom: 0;color: #1265A8;">Total Teknisi</h4>
+                                        <i class="iconify nav-icon ml-auto" data-icon="fa-solid:users-cog"
+                                            style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
+                                    <p style="font-size: 36px;color: #1265A8;">
+                                        11</p>
                                 </div>
                             </div>
-                            <!-- ./col -->
-                            <div class=" col-lg-2 col-1 mr-5">
-                                <!-- small box -->
-                                <div class="small-box bg-white" style="font-weight: bold;">
-                                    <div class="inner">
-                                        <h6
-                                            style="vertical-align: middle; margin-right: 10px; color:#1265A8;  text-align:center">
-                                            Teknisi</h6>
-                                        <p style="font-size: 36px; color:#1265A8; text-align:center">2</p>
-                                        <a href="#" class="small-box-footer"></i></a>
+
+                            <div class="col-lg-3 col-md-6">
+                                <div class="small-box bg-white text-center d-flex flex-column "
+                                    style="font-weight: bold; padding: 20px;">
+                                    <div class="d-flex align-items-center justify-content-end mb-3">
+                                        <h4 style="margin-bottom: 0;color: #1265A8;">Total Perangkat</h4>
+                                        <i class="iconify nav-icon ml-auto" data-icon="mingcute:location-3-line"
+                                            style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
+                                    <p style="font-size: 36px;color: #1265A8;">
+                                        11</p>
                                 </div>
                             </div>
-                            <!-- ./col -->
+
                         </div>
                     </div>
+                </div>
             </div>
         </div>
         <div class="container-fluid">
@@ -80,36 +90,61 @@
                     <h1 class="card-title"><b>List Klien</b></h1>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap">
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                <div class="table-responsive" style="overflow-x:auto;">
+                    <table class="table table-striped text-center" id="tablecar">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Nama Klien</th>
-                                <th>Kontak</th>
-                                <th>Alamat</th>
-                                <th>Server</th>
-                                <th>Perangkat</th>
-                                <th>Aksi</th>
+                                <th scope="col">No</th>
+                                <th scope="col">Logo</th>
+                                <th scope="col">Nama Klien</th>
+                                <th scope="col">Kontak</th>
+                                <th scope="col">Alamat</th>
+                                <th scope="col">Server</th>
+                                <th scope="col">Perangkat</th>
+                                <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($data as $d)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        @if ($d->image)
+                                            <img src="{{ asset('storage/' . $d->image) }}" class="img-fluid" alt="image"
+                                                width="30" />
+                                        @else
+                                            <span>No Image</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $d->name }}</td>
                                     <td>{{ $d->kontak }}</td>
                                     <td>{{ $d->alamat }}</td>
-                                    <td>{{ $d->server }}</td>
-                                    <td>{{ $d->perangkat }}</td>
+                                    <td>{{ $d->server?->nama_server }}</td>
+                                    <td>
+                                        <a href="{{ route('detailDevice', ['id' => $d->id]) }}"
+                                            class="btn btn-info">{{ $d->device->count() }} <i
+                                                class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
+                                        </a>
+                                    </td>
                                     <td>
 
-                                        <a href="{{ route('editAkun', ['id' => $d->id]) }}" class="btn btn-primary"><i
+                                        <a href="{{ route('editKlien', ['id' => $d->id]) }}" class="btn btn-primary"><i
                                                 class= "fas fa-pen"></i></a>
                                         <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
                                             class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
-                                            <a href="#" class="btn btn-primary">
-                                                <i class="fa-solid fa-map-location-dot"></i></i></a>
+                                        <a href="{{ route('klienlokasi', ['id' => $d->id]) }}" class="btn btn-success"><i
+                                                class= "fa-solid fa-map-location-dot"></i></a>
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="modal-hapus{{ $d->id }}">
@@ -128,7 +163,7 @@
                                                 </p>
                                             </div>
                                             <div class="modal-footer justify-content-between">
-                                                <form action="{{ route('delete', ['id' => $d->id]) }}" method="POST">
+                                                <form action="{{ route('deleteAkun', ['id' => $d->id]) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="button" class="btn btn-default"
@@ -148,8 +183,8 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <!-- /.card-body -->
                 </div>
-                <!-- /.card-body -->
             </div>
             <!-- /.card -->
         </div>

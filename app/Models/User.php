@@ -21,6 +21,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'alamat',
+        'kontak',
+        'tahun_langganan',
+        'server_id',
+        'latitude',
+        'longitude',
+        'role',
+        'status',
+        'image',
     ];
 
     /**
@@ -41,5 +50,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'server_id' => 'integer',
     ];
+
+    function server ()
+    {
+        return $this-> belongsTo (Server::class, 'server_id','id');
+    }
+
+    function device ()
+    {
+        return $this->hasMany (Device::class,'user_id','id');
+    }
 }
