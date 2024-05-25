@@ -127,7 +127,7 @@ class KlienController extends Controller
         if (empty($request->status)) {
             unset($validatedData['status']);
         }
-        
+
         // Update data pengguna
         $user->update($validatedData);
 
@@ -160,7 +160,7 @@ class KlienController extends Controller
     public function detailklien($id)
     {
         $data = User::whereHas('server', function ($query) use ($id) {
-            $query->where('id', $id);
+            $query->where('id', $id);   
         })
             ->get();
 

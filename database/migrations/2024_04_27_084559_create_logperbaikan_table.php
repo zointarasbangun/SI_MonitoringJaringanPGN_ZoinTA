@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('logperbaikan', function (Blueprint $table) {
             $table->id();
+            $table->string('teknisi')->unique();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('server_id')->nullable();
             $table->unsignedBigInteger('device_id')->nullable();
@@ -20,6 +21,7 @@ return new class extends Migration {
             $table->foreign('device_id')->references('id')->on('devices')->onDelete('set null');
             $table->date('tanggal');
             $table->enum('judul', ['Nilai1', 'Nilai2', 'Nilai3', '']);
+            $table->enum('statusadmin', ['ditolak', 'menunggu', 'disetujui'])->default('menunggu');
             $table->text('keterangan');
             $table->string('foto')->nullable();
             $table->timestamps();

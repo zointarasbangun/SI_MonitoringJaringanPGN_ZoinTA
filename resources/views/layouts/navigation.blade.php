@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="" class="brand-link">
-        <img src="{{ asset('img/logopgn1.png') }}" style="opacity: 1" alt="User Image" width="220">
+        <img src="{{ asset('img/logopgn1.png') }}" style="opacity: .8" alt="User Image" width="220">
     </a>
 
     <!-- Sidebar -->
@@ -86,7 +86,7 @@
                                     </a>
                                 </li>
                                 <li id="menu-status-perjalanan" class="nav-item">
-                                    <a href="" class="nav-link">
+                                    <a href="{{ route('statuslog') }}" class="nav-link">
                                         <i class="far fa-calendar-check nav-icon"></i>
                                         <p>Status Log</p>
                                     </a>
@@ -171,20 +171,26 @@
                                 <p>Log <i class="right fas fa-angle-left"></i></p>
                             </a>
                             <ul class="nav nav-treeview" style="padding-left: 20px;">
-                                <li id="menu-data-perjalanan" class="nav-item">
+                                <li id="menu-data-log" class="nav-item">
                                     <a href="{{ route('teknisi.datalog') }}" class="nav-link">
                                         <i class="iconify nav-icon" data-icon="carbon:data-table"></i>
                                         <p>Data Log</p>
                                     </a>
                                 </li>
-                                <li id="menu-status-perjalanan" class="nav-item">
-                                    <a href="" class="nav-link">
+                                <li id="menu-data-log" class="nav-item">
+                                    <a href="{{ route('teknisi.statuslog') }}" class="nav-link">
                                         <i class="far fa-calendar-check nav-icon"></i>
                                         <p>Status Log</p>
                                     </a>
                                 </li>
-                                <li id="menu-status-perjalanan" class="nav-item">
+                                {{-- <li id="menu-status-perjalanan" class="nav-item">
                                     <a href="" class="nav-link">
+                                        <i class="far fa-calendar-check nav-icon"></i>
+                                        <p>Status Log</p>
+                                    </a>
+                                </li> --}}
+                                <li id="menu-status-perjalanan" class="nav-item">
+                                    <a href="{{ route('teknisi.riwayatlog') }}" class="nav-link">
                                         <i class="fa-solid fa-clock-rotate-left nav-icon"></i>
                                         <p>Riwayat Log</p>
                                     </a>
@@ -220,19 +226,21 @@
                             </a>
                         </li>
                         <li id="menu-acount" class="nav-item {{ request()->is('') ? 'menu-open' : '' }}">
-                            <a href="" class="nav-link ">
+                            <a href="{{ route('klien.dataDevice', ['id' => auth()->user()->id]) }}" class="nav-link ">
                                 <i class="iconify nav-icon" data-icon="mingcute:location-3-line"></i>
                                 <p>Perangkat</p>
                             </a>
                         </li>
-                        <li id="menu-acount" class="nav-item {{ request()->is('') ? 'menu-open' : '' }}">
-                            <a href="" class="nav-link ">
+                        <li id="menu-account" class="nav-item {{ request()->is('') ? 'menu-open' : '' }}">
+                            <a href="{{ route('klien.monitoringlokasi', ['id' => auth()->user()->id]) }}"
+                                class="nav-link">
                                 <i class="iconify nav-icon" data-icon="grommet-icons:location"></i>
                                 <p>Lokasi</p>
                             </a>
                         </li>
+
                         <li id="menu-perjalanan" class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('klien.datalog', ['id' => auth()->user()->id]) }}" class="nav-link">
                                 <i class="iconify nav-icon" data-icon="tdesign:data"></i>
                                 <p>Log</p>
                             </a>

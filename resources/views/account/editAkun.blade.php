@@ -86,11 +86,9 @@
                                         </option>
                                     </select>
                                 </div>
-
-                                <div class="card-body">
                                     <!-- Your existing form fields -->
                                     <!-- Image preview -->
-                                    <div class="form-group">
+                                    <div class="form-group text-light">
                                         <label for="current_image" style="color: white;">Current Image</label><br>
                                         @if ($user->image)
                                             <img src="{{ asset('storage/' . $user->image) }}" alt="Current Image"
@@ -105,8 +103,6 @@
                                         <input type="file" name="image" class="form-control" id="image"
                                             accept="image/*">
                                     </div>
-                                    <!-- Your existing form fields -->
-                                </div>
 
                                 <div class="form-group">
                                     <label for="role" style="color: white;">Role</label>
@@ -123,7 +119,7 @@
 
                                 <div class="form-group">
                                     <label for="exampleInputPassword1" style="color: white;">Password</label>
-                                    <input type="password" name="password" class="form-control""
+                                    <input type="password" name="password" class="form-control"
                                         id="exampleInputPassword1" placeholder=" Masukkan Password">
                                 </div>
                             </div>

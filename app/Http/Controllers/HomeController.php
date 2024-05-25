@@ -2,36 +2,74 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
+use App\Models\logperbaikan;
 use App\Models\Monitoring;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
+    public function app()
+    {
+
+    }
     public function dashboard()
     {
         if (auth()->check()) {
-            $role = auth()->user()->role;
-            $data = User::whereNot('role', 'admin')->whereNot('role', 'teknisi')->get();
+            $user = auth()->user();
+            $userId = $user->id;
+            $role = $user->role;
+            $data = User::whereNotIn('role', ['admin', 'teknisi'])->get();
+            $device = Device::all();
+            $teknisi = User::where('role', 'teknisi')->get();
+            $klien = User::where('role', 'klien')->get();
+            $server = Server::all();
+            $devices = Device::where('user_id', $userId)->get();
+
             // Menyesuaikan tampilan berdasarkan peran pengguna
             if ($role == 'admin') {
-                return view('dashboard.admindashboard', compact('data'));
+                return view('dashboard.admindashboard', compact('data', 'device', 'teknisi', 'klien', 'server'));
             } elseif ($role == 'teknisi') {
-                return view('dashboard.teknisidashboard', compact('data'));
+                return view('dashboard.teknisidashboard', compact('data', 'device', 'teknisi', 'klien', 'server', 'userId', 'devices'));
             } elseif ($role == 'klien') {
-                return view('dashboard.kliendashboard', compact('data'));
+                return redirect()->route('dashboardklien', ['id' => $userId]);
             } else {
                 // Peran lainnya, Anda dapat menyesuaikan atau menangani kasus ini sesuai kebutuhan
                 return view('dashboard', compact('data'));
             }
         }
 
-        // Jika tidak terotentikasi, mungkin Anda ingin menangani sesuatu di sini, seperti menampilkan halaman login.
-        return redirect('/login');
+        return redirect()->route('login'); // Jika tidak terautentikasi, redirect ke halaman login
+    }
+
+
+    public function dashboardklien($userId)
+    {
+        // Mengambil data perangkat yang dimiliki oleh pengguna (klien) dengan ID tertentu
+        $data = Device::whereHas('user', function ($query) use ($userId) {
+            $query->where('id', $userId);
+        })
+            ->get();
+
+        // Mengambil data pengguna dengan peran 'klien'
+        $user = User::where('role', 'klien')->get();
+        $device = Device::get()->count();
+        $teknisi = User::where('role', 'teknisi')->count();
+        $klien = User::where('role', 'klien')->count();
+        // Mengambil user yang sedang login
+        $user = auth()->user();
+
+        // Menghitung jumlah device yang terhubung ke user yang sedang login
+        $deviceCount = $user->device()->count();
+
+        // Mengembalikan view dengan data perangkat dan klien
+        return view('dashboard.kliendashboard', compact('data', 'user', 'device', 'klien', 'teknisi', 'deviceCount'));
     }
 
     public function store(Request $request)
@@ -81,7 +119,7 @@ class HomeController extends Controller
 
 
 
-    public function editAkun(Request $request, $id)
+    public function editAkun($id)
     {
         // Cek apakah user dengan ID yang diberikan ada dalam database
         $user = User::findOrFail($id);
@@ -199,4 +237,313 @@ class HomeController extends Controller
 
             return false;
     }
+
+    public function searchakun(Request $request)
+    {
+        $query = User::where('role', '!=', 'admin'); // Pastikan admin tidak termasuk
+
+        if ($request->has('search')) {
+            $searchTerm = '%' . $request->search . '%';
+
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'LIKE', $searchTerm)
+                    ->orWhere('role', 'LIKE', $searchTerm);
+            });
+        }
+
+        $user = $query->get(); // Gunakan variabel $users untuk mengirim hasil pencarian
+        $server = Server::get();
+
+        return view('account.dataAkun', compact('user', 'server')); // Pastikan 'users' adalah nama variabel yang dikirim ke view
+    }
+
+
+    public function searchklien(Request $request)
+    {
+        $query = User::query();
+
+        // Lakukan join dengan tabel server
+        $query->join('servers', 'users.server_id', '=', 'servers.id')
+            ->where('users.role', 'klien');
+        ; // Pastikan admin tidak termasuk
+
+        if ($request->has('search')) {
+            $searchTerm = '%' . $request->search . '%';
+
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'LIKE', $searchTerm)
+                    ->orWhere('kontak', 'LIKE', $searchTerm)
+                    ->orWhere('alamat', 'LIKE', $searchTerm)
+                    ->orWhere('servers.nama_server', 'LIKE', $searchTerm);
+            });
+        }
+
+
+        $data = $query->get();
+        $server = Server::get();
+
+        return view('klien.dataKlien', compact('data', 'server'));
+    }
+
+    public function searchserver(Request $request)
+    {
+        $query = Server::query();
+
+        if ($request->has('search')) {
+            $searchTerm = '%' . $request->search . '%';
+
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('nama_server', 'LIKE', $searchTerm);
+            });
+        }
+
+
+        $server = $query->get();
+
+        return view('server.server', compact('server'));
+    }
+
+    public function searchdevice(Request $request)
+    {
+        $query = Device::query();
+        $user = User::where('role', 'klien')->get();
+
+        if ($request->has('search')) {
+            $searchTerm = '%' . $request->search . '%';
+
+            $query->where(function ($q) use ($searchTerm) {
+
+                $q->where('nama_perangkat', 'LIKE', $searchTerm)->orWhere('ip_perangkat', 'LIKE', $searchTerm);
+            });
+        }
+
+        $data = $query->get();
+
+        return view('device.perangkat', compact('data', 'user'));
+    }
+
+    public function searchdetaildevice(Request $request)
+    {
+        $query = Device::query();
+
+        // Dapatkan user_id dari request
+        $userId = $request->input('user_id');
+
+        if ($userId) {
+            // Filter perangkat berdasarkan user_id
+            $query->whereHas('user', function ($q) use ($userId) {
+                $q->where('id', $userId);
+            });
+        }
+
+        if ($request->has('search')) {
+            $searchTerm = '%' . $request->input('search') . '%';
+
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('nama_perangkat', 'LIKE', $searchTerm)
+                    ->orWhere('ip_perangkat', 'LIKE', $searchTerm);
+            });
+        }
+
+        $data = $query->get();
+
+        return view('device.detailperangkat', compact('data'));
+    }
+
+
+    public function searchlog(Request $request)
+    {
+        $search = $request->input('search');
+        $cariTanggalAwal = $request->input('cariTanggalAwal');
+        $cariTanggalAkhir = $request->input('cariTanggalAkhir');
+        $user = Auth::user();
+        $role = $user->role;
+
+        // Mulai query logperbaikan
+        $query = logperbaikan::with(['userlog', 'serverlog', 'devicelog']);
+
+        if ($role === 'klien') {
+            // Untuk klien, hanya menampilkan data yang berhubungan dengan akun klien tersebut
+            $query->whereHas('userlog', function ($query) use ($user) {
+                $query->where('id', $user->id)->where('role', 'klien');
+            });
+        } else {
+            // Untuk admin dan teknisi, menampilkan semua data log yang sudah disetujui dan selesai
+            $query->whereNotNull('foto');
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('userlog', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('serverlog', function ($q) use ($search) {
+                    $q->where('nama_server', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('devicelog', function ($q) use ($search) {
+                    $q->where('nama_perangkat', 'LIKE', '%' . $search . '%');
+                })->orWhere('statusadmin', 'LIKE', '%' . $search . '%')
+                    ->orWhere('tanggal', 'LIKE', '%' . $search . '%')
+                    ->orWhere('teknisi', 'LIKE', '%' . $search . '%')
+                    ->orWhere('foto', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        // Tambahkan kondisi untuk filter tanggal
+        if ($cariTanggalAwal && $cariTanggalAkhir) {
+            $query->whereBetween('tanggal', [$cariTanggalAwal, $cariTanggalAkhir]);
+        } elseif ($cariTanggalAwal) {
+            $query->where('tanggal', '>=', $cariTanggalAwal);
+        } elseif ($cariTanggalAkhir) {
+            $query->where('tanggal', '<=', $cariTanggalAkhir);
+        }
+
+        // Eksekusi query dan dapatkan hasilnya
+        $log = $query->get();
+
+        // Dapatkan data user dan server untuk form pencarian
+        $user = User::whereNot('role', 'admin')->get();
+        $server = Server::all();
+
+        return view('logperbaikan.datalog', compact('log', 'user', 'server'));
+    }
+
+
+    public function kliensearchlog(Request $request)
+    {
+        $search = $request->input('search');
+        $cariTanggalAwal = $request->input('cariTanggalAwal');
+        $cariTanggalAkhir = $request->input('cariTanggalAkhir');
+
+        // Dapatkan user yang sedang login
+        $loggedInUser = Auth::user();
+
+        // Mulai query logperbaikan
+        $query = logperbaikan::with(['userlog', 'serverlog', 'devicelog'])
+            ->whereHas('userlog', function ($query) use ($loggedInUser) {
+                $query->where('id', $loggedInUser->id)->where('role', 'klien');
+            })
+            ->whereNotNull('foto');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('userlog', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('serverlog', function ($q) use ($search) {
+                    $q->where('nama_server', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('devicelog', function ($q) use ($search) {
+                    $q->where('nama_perangkat', 'LIKE', '%' . $search . '%');
+                })->orWhere('statusadmin', 'LIKE', '%' . $search . '%')
+                    ->orWhere('tanggal', 'LIKE', '%' . $search . '%')
+                    ->orWhere('teknisi', 'LIKE', '%' . $search . '%')
+                    ->orWhere('foto', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        // Tambahkan kondisi untuk filter tanggal
+        if ($cariTanggalAwal && $cariTanggalAkhir) {
+            $query->whereBetween('tanggal', [$cariTanggalAwal, $cariTanggalAkhir]);
+        } elseif ($cariTanggalAwal) {
+            $query->where('tanggal', '>=', $cariTanggalAwal);
+        } elseif ($cariTanggalAkhir) {
+            $query->where('tanggal', '<=', $cariTanggalAkhir);
+        }
+
+        // Eksekusi query dan dapatkan hasilnya
+        $log = $query->get();
+
+        // Dapatkan data user dan server untuk form pencarian
+        $user = User::whereNot('role', 'admin')->get();
+        $server = Server::all();
+
+        return view('logperbaikan.datalog', compact('log', 'user', 'server'));
+    }
+
+
+    public function searchstatuslog(Request $request)
+    {
+        $search = $request->input('search');
+        $cariTanggalAwal = $request->input('cariTanggalAwal');
+        $cariTanggalAkhir = $request->input('cariTanggalAkhir');
+        $namaTeknisi = Auth::user()->name;
+        // Mulai query logperbaikan
+        $query = logperbaikan::with(['userlog', 'serverlog', 'devicelog'])
+            ->whereNull('foto'); // Menambahkan kondisi untuk hanya mengambil yang sedang diproses
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('userlog', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('serverlog', function ($q) use ($search) {
+                    $q->where('nama_server', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('devicelog', function ($q) use ($search) {
+                    $q->where('nama_perangkat', 'LIKE', '%' . $search . '%');
+                })->orWhere('statusadmin', 'LIKE', '%' . $search . '%')
+                    ->orWhere('tanggal', 'LIKE', '%' . $search . '%')
+                    ->orWhere('teknisi', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        // Tambahkan kondisi untuk filter tanggal
+        if ($cariTanggalAwal && $cariTanggalAkhir) {
+            $query->whereBetween('tanggal', [$cariTanggalAwal, $cariTanggalAkhir]);
+        } elseif ($cariTanggalAwal) {
+            $query->where('tanggal', '>=', $cariTanggalAwal);
+        } elseif ($cariTanggalAkhir) {
+            $query->where('tanggal', '<=', $cariTanggalAkhir);
+        }
+
+        // Eksekusi query dan dapatkan hasilnya
+        $log = $query->get();
+
+        // Dapatkan data user dan server untuk form pencarian
+        $user = User::where('role', '!=', 'admin')->get();
+        $server = Server::all();
+
+        return view('logperbaikan.statuslog', compact('log', 'user', 'server', 'namaTeknisi'));
+    }
+
+    public function searchriwayatlog(Request $request)
+    {
+        $namaTeknisi = Auth::user()->name;
+        $search = $request->input('search');
+        $cariTanggalAwal = $request->input('cariTanggalAwal');
+        $cariTanggalAkhir = $request->input('cariTanggalAkhir');
+
+        // Mulai query logperbaikan
+        $query = logperbaikan::with(['userlog', 'serverlog', 'devicelog'])
+            ->whereNotNull('foto')->where('teknisi', $namaTeknisi);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('userlog', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('serverlog', function ($q) use ($search) {
+                    $q->where('nama_server', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('devicelog', function ($q) use ($search) {
+                    $q->where('nama_perangkat', 'LIKE', '%' . $search . '%');
+                })->orWhere('statusadmin', 'LIKE', '%' . $search . '%')
+                    ->orWhere('tanggal', 'LIKE', '%' . $search . '%')
+                    ->orWhere('teknisi', 'LIKE', '%' . $search . '%')
+                    ->orWhere('foto', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        // Tambahkan kondisi untuk filter tanggal
+        if ($cariTanggalAwal && $cariTanggalAkhir) {
+            $query->whereBetween('tanggal', [$cariTanggalAwal, $cariTanggalAkhir]);
+        } elseif ($cariTanggalAwal) {
+            $query->where('tanggal', '>=', $cariTanggalAwal);
+        } elseif ($cariTanggalAkhir) {
+            $query->where('tanggal', '<=', $cariTanggalAkhir);
+        }
+
+        // Eksekusi query dan dapatkan hasilnya
+        $log = $query->get();
+
+        // Dapatkan data user dan server untuk form pencarian
+        $user = User::whereNot('role', 'admin')->get();
+        $server = Server::all();
+
+        return view('logperbaikan.riwayatlog', compact('log', 'user', 'server', 'namaTeknisi'));
+    }
+
 }

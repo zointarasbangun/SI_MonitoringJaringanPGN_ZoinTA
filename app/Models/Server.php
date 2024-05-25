@@ -16,9 +16,14 @@ class Server extends Model
 
     ];
 
-    function user()
+    function users()
     {
         return $this-> hasMany(User::class,'server_id','id');
+    }
+
+    function logperbaikan()
+    {
+        return $this-> hasMany(logperbaikan::class,'server_id','id');
     }
 
 }

@@ -62,4 +62,9 @@ class User extends Authenticatable
     {
         return $this->hasMany (Device::class,'user_id','id');
     }
+
+    function logperbaikan()
+    {
+        return $this->hasMany(logperbaikan::class, 'user_id','id');
+    }
 }

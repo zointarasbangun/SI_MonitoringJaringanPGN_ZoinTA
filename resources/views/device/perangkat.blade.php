@@ -6,7 +6,7 @@
             <div class="row p-5" style=" margin-bottom : 20px; background-color: #1265A8; ">
 
                 <div class="col-lg-4 col-sm-6">
-                    <form action="/kendaraan/search" class="form-inline" method="GET">
+                    <form action="{{ route('searchdevice') }}" class="form-inline" method="GET">
                         <div class="input-group " style="flex-grow: 10;">
                             <input type="search" class="form-control mr-10" style="width: 200px;" name="search"
                                 id="cariDataKendaraan" placeholder="Cari Data Perangkat...">
@@ -14,10 +14,10 @@
                                 <button class="btn btn-primary ml-1" type="submit"><i class="iconify"
                                         data-icon="material-symbols:search"></i> Cari</button>
                                 @if (Auth::user()->role == 'admin')
-                                    <a href="" class="btn btn-danger ml-1"><i class="iconify"
+                                    <a href="{{ route('dataDevice') }}" class="btn btn-danger ml-1"><i class="iconify"
                                             data-icon="solar:refresh-linear"></i> Reset</a>
                                 @else
-                                    <a href="/tipeKendaraanUser" class="btn btn-danger ml-1"><i class="iconify"
+                                    <a href="{{ route('teknisi.dataDevice') }}" class="btn btn-danger ml-1"><i class="iconify"
                                             data-icon="solar:refresh-linear"></i> Reset</a>
                                 @endif
                             </div>
@@ -29,95 +29,96 @@
                 </div>
 
                 @if (Auth::user()->role == 'admin')
-                <div class="col-lg-4 col-sm-12">
-                    <div class="float-right">
+                    <div class="col-lg-4 col-sm-12">
+                        <div class="float-right">
 
-                        <!-- Button Modal -->
-                        <div class="text-center">
-                            <a href="" class="btn btn-light btn-rounded mb-4" data-toggle="modal"
-                                style="color:#12ACED" data-target="#modalLoginForm"><i class="iconify nav-icon mr-3"
-                                    data-icon="line-md:account-add"></i>Tambah Perangkat</a>
-                        </div>
-                        <!-- Modal -->
-                        <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog"
-                            aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content" style="color:white; background:#1265A8; padding:10px;">
-                                    <div class="modal-header text-start">
-                                        <h5 class="modal-title w-100 font-weight-bold">Tambah Perangkat</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                                            style="color: white;">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                            <!-- Button Modal -->
+                            <div class="text-center">
+                                <a href="" class="btn btn-light btn-rounded mb-4" data-toggle="modal"
+                                    style="color:#12ACED" data-target="#modalLoginForm"><i class="iconify nav-icon mr-3"
+                                        data-icon="line-md:account-add"></i>Tambah Perangkat</a>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog"
+                                aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content" style="color:white; background:#1265A8; padding:10px;">
+                                        <div class="modal-header text-start">
+                                            <h5 class="modal-title w-100 font-weight-bold">Tambah Perangkat</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                                style="color: white;">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
 
+                                        </div>
+                                        <form class="" method="POST" action="{{ route('addDevice') }}">
+                                            @csrf
+                                            <div class="modal-body mx-3">
+                                                <div class="mb-2">
+                                                    <i class="mr-3 fa-regular fa-user"></i>
+                                                    <label data-error="wrong" data-success="right"
+                                                        for="defaultForm-namaperangkat">Nama Perangkat</label>
+                                                    <input type="text" name="nama_perangkat"
+                                                        id="defaultForm-namaperangkat" class="form-control validate"
+                                                        placeholder="Input nama perangkat">
+                                                </div>
+
+                                                <div class="mb-2">
+                                                    <i class="mr-3 fas fa-globe"></i>
+                                                    <label data-error="wrong" data-success="right"
+                                                        for="defaultForm-latitude">Latitude</label>
+                                                    <input type="number" step=any name="latitude" id="defaultForm-latitude"
+                                                        class="form-control validate"
+                                                        placeholder="Input Latitude (contoh: -6.1754)">
+                                                </div>
+
+                                                <div class="mb-2">
+                                                    <i class="mr-3 fas fa-globe"></i>
+                                                    <label data-error="wrong" data-success="right"
+                                                        for="defaultForm-longitude">Longitude</label>
+                                                    <input type="number" step=any name="longitude"
+                                                        id="defaultForm-longitude" class="form-control validate"
+                                                        placeholder="Input Longitude (contoh: 111.1754)">
+                                                </div>
+
+                                                <div class="mb-2">
+                                                    <i class="iconify nav-icon" data-icon="uil:server"></i>
+                                                    <label for="klien" class="ml-3">Pilih Klien</label>
+                                                    <select class="custom-select form-control validate" id="user_id"
+                                                        name="user_id" aria-label="Default select example"
+                                                        style="color:black;">
+                                                        @foreach ($user as $s)
+                                                            <option value="{{ $s->id }}">
+                                                                {{ $s->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-2">
+                                                    <i class="mr-3 fas fa-globe"></i>
+                                                    <label data-error="wrong" data-success="right"
+                                                        for="defaultForm-ip">IP
+                                                        Perangkat</label>
+                                                    <input type="text" name="ip_perangkat" id="defaultForm-ip"
+                                                        class="form-control validate"
+                                                        placeholder="Input IP (contoh: 192.168.1.1)">
+                                                </div>
+
+
+
+                                            </div>
+                                            <div class="modal-footer d-flex justify-content-center">
+                                                <button type="submit" class="btn btn-success">Tambah Device</button>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <form class="" method="POST" action="{{ route('addDevice') }}">
-                                        @csrf
-                                        <div class="modal-body mx-3">
-                                            <div class="mb-2">
-                                                <i class="mr-3 fa-regular fa-user"></i>
-                                                <label data-error="wrong" data-success="right"
-                                                    for="defaultForm-namaperangkat">Nama Perangkat</label>
-                                                <input type="text" name="nama_perangkat" id="defaultForm-namaperangkat"
-                                                    class="form-control validate" placeholder="Input nama perangkat">
-                                            </div>
-
-                                            <div class="mb-2">
-                                                <i class="mr-3 fas fa-globe"></i>
-                                                <label data-error="wrong" data-success="right"
-                                                    for="defaultForm-latitude">Latitude</label>
-                                                <input type="number" step=any name="latitude" id="defaultForm-latitude"
-                                                    class="form-control validate"
-                                                    placeholder="Input Latitude (contoh: -6.1754)">
-                                            </div>
-
-                                            <div class="mb-2">
-                                                <i class="mr-3 fas fa-globe"></i>
-                                                <label data-error="wrong" data-success="right"
-                                                    for="defaultForm-longitude">Longitude</label>
-                                                <input type="number" step=any name="longitude" id="defaultForm-longitude"
-                                                    class="form-control validate"
-                                                    placeholder="Input Longitude (contoh: 111.1754)">
-                                            </div>
-
-                                            <div class="mb-2">
-                                                <i class="iconify nav-icon" data-icon="uil:server"></i>
-                                                <label for="klien" class="ml-3">Pilih Klien</label>
-                                                <select class="custom-select form-control validate" id="user_id"
-                                                    name="user_id" aria-label="Default select example"
-                                                    style="color:black;">
-                                                    @foreach ($user as $s)
-                                                        <option value="{{ $s->id }}">
-                                                            {{ $s->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="mb-2">
-                                                <i class="mr-3 fas fa-globe"></i>
-                                                <label data-error="wrong" data-success="right" for="defaultForm-ip">IP
-                                                    Perangkat</label>
-                                                <input type="text" name="ip_perangkat" id="defaultForm-ip"
-                                                    class="form-control validate"
-                                                    placeholder="Input IP (contoh: 192.168.1.1)">
-                                            </div>
-
-
-
-                                        </div>
-                                        <div class="modal-footer d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-success">Tambah Device</button>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
+                            <!-- /modal -->
+
                         </div>
-                        <!-- /modal -->
-
                     </div>
-                </div>
                 @elseif (Auth::user()->role == 'teknisi')
-
                 @endif
             </div>
         </div>
@@ -170,17 +171,33 @@
                                             </span>
                                         @endif
                                     </td>
+                                    @if (Auth::user()->role == 'admin')
                                     <td>
-
                                         <a href="{{ route('editDevice', ['id' => $d->id]) }}" class="btn btn-primary"><i
-                                                class= "fas fa-pen"></i></a>
-                                        <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
-                                            class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
-                                        <a href="{{ route('editKlien', ['id' => $d->id]) }}" class="btn btn-success"><i
+                                            class= "fas fa-pen"></i></a>
+                                    <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
+                                        class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
+                                        <a href="{{ route('monitoringlokasi', ['id' => $d->id]) }}"
+                                            class="btn btn-success"> <i
                                                 class= "fa-solid fa-map-location-dot"></i></a>
-                                        {{-- <a href="#" class="btn btn-primary">
-                                        <i class="fa-solid fa-map-location-dot"></i></a> --}}
                                     </td>
+                                    @elseif (Auth::user()->role == 'teknisi')
+                                        <td>
+                                            <a href="{{ route('teknisi.monitoringlokasi', ['id' => $d->id]) }}"
+                                                class="btn btn-success">Lihat lokasi <i
+                                                    class= "fa-solid fa-map-location-dot"></i></a>
+                                            {{-- <a href="#" class="btn btn-primary">
+                                        <i class="fa-solid fa-map-location-dot"></i></a> --}}
+                                        </td>
+                                        @elseif (Auth::user()->role == 'klien')
+                                        <td>
+                                            <a href="{{ route('klien.monitoringlokasi', ['id' => auth()->user()->id]) }}"
+                                                class="btn btn-success">Lihat lokasi <i
+                                                    class= "fa-solid fa-map-location-dot"></i></a>
+                                            {{-- <a href="#" class="btn btn-primary">
+                                        <i class="fa-solid fa-map-location-dot"></i></a> --}}
+                                        </td>
+                                    @endif
                                 </tr>
                                 <div class="modal fade" id="modal-hapus{{ $d->id }}">
                                     <div class="modal-dialog">
@@ -255,7 +272,7 @@
 
             $(document).ready(function() {
                 tesPing()
-                setInterval(tesPing, 30000);
+                setInterval(tesPing, 20000);
                 // $("[id='status-25']").html("<span class='badge bg-success'>Terhubung</span>")
             })
         </script>

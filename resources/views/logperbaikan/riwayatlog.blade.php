@@ -1,9 +1,12 @@
 @extends('layouts.app')
 @section('content')
+    <style>
+    </style>
+
     <div class="content-wrapper">
         <div class="container-fluid p-5" style="background-color:#1265A8">
             <div class="row">
-                <form action="{{ route('searchlog') }}" class="form-inline w-100" method="GET">
+                <form action="{{ route('searchriwayatlog') }}" class="form-inline w-100" method="GET">
                     <div class="col-lg-3 col-sm-12 text-light">
                         <label for="cariData" class="large">Cari :
                             <input type="text" class="form-control ml-1" name="search" id="cariData"
@@ -25,48 +28,27 @@
                     </div>
 
                     <div class="col-lg-3 col-sm-12 d-flex justify-content-between align-items-center">
-                        @if (Auth::user()->role == 'admin')
-                            <div id="actionCari">
-                                <button class="btn btn-primary ml-1" type="submit"><i class="iconify"
-                                        data-icon="material-symbols:search"></i></button>
-
-                                <a href="{{ route('datalog') }}" class="btn btn-danger ml-1"><i class="iconify"
-                                        data-icon="solar:refresh-linear"></i></a>
-                            </div>
-
-
-                            <a href="{{ route('downloadexcel', request()->all()) }}" class="btn btn-success ml-1" type="button">
-                                <i class="iconify nav-icon" data-icon="mdi:file-excel"></i> Excel
-                            </a>
-                            <a href="{{ route('downloadpdf',request()->all()) }}" class="btn btn-danger ml-1" type="button">
-                                <i class="iconify nav-icon" data-icon="ant-design:file-pdf-filled"></i> PDF
-                            </a>
-                        @elseif(Auth::user()->role == 'teknisi')
-                            <div id="actionCari">
-                                <button class="btn btn-primary ml-1" type="submit"><i class="iconify"
-                                        data-icon="material-symbols:search"></i></button>
-                                <a href="{{ route('teknisi.datalog') }}" class="btn btn-danger ml-1"><i class="iconify"
-                                        data-icon="solar:refresh-linear"></i></a>
-                            </div>
-                        @elseif(Auth::user()->role == 'klien')
-                            <div id="actionCari">
-                                <button class="btn btn-primary ml-1" type="submit"><i class="iconify"
-                                        data-icon="material-symbols:search"></i></button>
-                                <a href="{{ route('klien.datalog', ['id' => auth()->user()->id]) }}"
-                                    class="btn btn-danger ml-1"><i class="iconify" data-icon="solar:refresh-linear"></i></a>
-                            </div>
-                        @endif
+                        <div id="actionCari">
+                            <button class="btn btn-primary ml-1" type="submit"><i class="iconify"
+                                    data-icon="material-symbols:search"></i></button>
+                            <a href="{{ route('teknisi.riwayatlog') }}" class="btn btn-danger ml-1"><i class="iconify"
+                                    data-icon="solar:refresh-linear"></i></a>
+                        </div>
+                        <a href="{{ route('teknisi.downloadexcel', request()->all()) }}" class="btn btn-success ml-1" type="button">
+                            <i class="iconify nav-icon" data-icon="mdi:file-excel"></i> Excel
+                        </a>
+                        <a href=" " class="btn btn-danger ml-1" type="button">
+                            <i class="iconify nav-icon" data-icon="ant-design:file-pdf-filled"></i> PDF
+                        </a>
                     </div>
-
                 </form>
             </div>
-
         </div>
 
         <div class="container-fluid mt-3">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="card-title"><b>Data Log Perbaikan</b></h1>
+                    <h1 class="card-title"><b>Riwayat Log Perbaikan</b></h1>
                 </div>
                 <!-- table -->
                 @if (session('success'))
@@ -94,11 +76,6 @@
                                 <th scope="col">Foto</th>
                                 <th scope="col">Status Log</th>
                                 <th scope="col">Status Admin</th>
-                                @if (Auth::user()->role == 'admin')
-                                    <th scope="col">Aksi</th>
-                                @elseif (Auth::user()->role == 'teknisi')
-                                @endif
-
                             </tr>
                         </thead>
                         <tbody>
@@ -219,17 +196,6 @@
                                                 {{ $d->statusadmin }}
                                             </span>
                                         @endif
-                                    </td>
-                                    @if (Auth::user()->role == 'admin')
-                                        <td>
-                                            <a href=" {{ route('teknisi.editlog', ['id' => $d->id]) }}"
-                                                class="btn btn-primary"><i class= "fas fa-pen"></i></a>
-                                            <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
-                                                class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
-                                        @elseif(Auth::user()->role == 'teknisi')
-                                    @endif
-                                    {{-- <a href="#" class="btn btn-primary">
-                                        <i class="fa-solid fa-map-location-dot"></i></a> --}}
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="modal-hapus{{ $d->id }}">

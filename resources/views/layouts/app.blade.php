@@ -133,64 +133,142 @@
             <ul class="navbar-nav ml-auto ">
 
                 <!-- Notif -->
-                <li class="nav-item dropdown mr-4">
-                    <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
-                        <i class="far fa-bell"></i>
-                        <span class="badge badge-warning ">15</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        {{-- <span class="dropdown-item dropdown-header disabled ">15 Notifications</span> --}}
-                        <div class="dropdown-divider"></div>
-                        <a href="/notifikasi" class="dropdown-item">
-                            <i class="fas fa-envelope mr-2"></i> 4 new messages
-                            <span class="float-right text-muted text-sm">3 mins</span>
+                @if (Auth::user()->role == 'admin')
+                    <li class="nav-item dropdown mr-4">
+                        <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
+                            <i class="far fa-bell"></i>
+                            <span class="badge badge-warning ">15</span>
                         </a>
-                        {{-- <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i> 8 friend requests
-                            <span class="float-right text-muted text-sm">12 hours</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-file mr-2"></i> 3 new reports
-                            <span class="float-right text-muted text-sm">2 days</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a> --}}
-                    </div>
-                </li>
-                <!-- /Notif -->
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            {{-- <span class="dropdown-item dropdown-header disabled ">15 Notifications</span> --}}
+                            <div class="dropdown-divider"></div>
+                            <a href="/notifikasi" class="dropdown-item">
+                                <i class="fas fa-envelope mr-2"></i> 4 new messages
+                                <span class="float-right text-muted text-sm">3 mins</span>
+                            </a>
+                        </div>
+                    </li>
+                    <!-- /Notif -->
 
-                <!-- Profile -->
-                <li class="nav-item dropdown">
-                    <a data-toggle="dropdown" href="#">
-                        <img src="{{ URL('img/avatar.png') }}" class="img-circle elevation-2" alt="User Image"
-                            width="40" height="40">
-                    </a>
+                    <!-- Profile -->
+                    <li class="nav-item dropdown">
+                        <a data-toggle="dropdown" href="#">
+                            <img src="{{ asset('storage/' . Auth::user()->image) }}" class="img-circle elevation-2" alt="User Image"
+                                width="40" height="40">
+                        </a>
 
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        {{-- <div class="dropdown-divider"></div> --}}
-                        <p class="dropdown-item dropdown-footer disabled ">Admin</p>
-                        {{-- <div class="dropdown-divider"></div> --}}
-                        <a href="" class="dropdown-item dropdown-footer"><i class="far fa-user mx-2"></i>Lihat
-                            Profil</a>
-                        {{-- <div class="dropdown-divider"></div> --}}
-                        <div>
-                            <a class="dropdown-item" href=""
+                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                            {{-- <div class="dropdown-divider"></div> --}}
+
+                            <a class="dropdown-item dropdown-footer disabled " style="font-weight: bold;"">Admin</a>
+
+
+                            {{-- <div class="dropdown-divider"></div> --}}
+                            <a href="{{ route('profileadmin') }}" class="dropdown-item dropdown-footer"><i
+                                    class="far fa-user mx-2"></i>Lihat
+                                Profil</a>
+                            <a class="dropdown-item dropdown-footer" href=""
                                 onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
 
-                            <form id="logout-form" action="" method="POST" class="d-none">
+                            <form id="logout-form" action="{{ route('logout') }}" method="GET" class="d-none">
                                 @csrf
                             </form>
 
+                    </li>
+                @elseif(Auth::user()->role == 'teknisi')
+                    <li class="nav-item dropdown mr-4">
+                        <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
+                            <i class="far fa-bell"></i>
+                            <span class="badge badge-warning ">15</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            {{-- <span class="dropdown-item dropdown-header disabled ">15 Notifications</span> --}}
+                            <div class="dropdown-divider"></div>
+                            <a href="/notifikasi" class="dropdown-item">
+                                <i class="fas fa-envelope mr-2"></i> 4 new messages
+                                <span class="float-right text-muted text-sm">3 mins</span>
+                            </a>
                         </div>
-                    </div>
+                    </li>
+                    <!-- /Notif -->
 
-                </li>
+                    <!-- Profile -->
+                    <li class="nav-item dropdown">
+                        <a data-toggle="dropdown" href="#">
+                            <img src="{{ asset('storage/' . Auth::user()->image) }}" class="img-circle elevation-2" alt="User Image"
+                                width="40" height="40">
+                        </a>
 
+                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                            {{-- <div class="dropdown-divider"></div> --}}
+
+                            <a class="dropdown-item dropdown-footer disabled " style="font-weight: bold;"">Teknisi</a>
+
+
+                            {{-- <div class="dropdown-divider"></div> --}}
+                            <a href="{{ route('profileteknisi') }}" class="dropdown-item dropdown-footer"><i
+                                    class="far fa-user mx-2"></i>Lihat
+                                Profil</a>
+                            <a class="dropdown-item dropdown-footer" href=""
+                                onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
+                            </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="GET" class="d-none">
+                                @csrf
+                            </form>
+
+                    </li>
+                @else
+                    <li class="nav-item dropdown mr-4">
+                        <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
+                            <i class="far fa-bell"></i>
+                            <span class="badge badge-warning ">15</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            {{-- <span class="dropdown-item dropdown-header disabled ">15 Notifications</span> --}}
+                            <div class="dropdown-divider"></div>
+                            <a href="/notifikasi" class="dropdown-item">
+                                <i class="fas fa-envelope mr-2"></i> 4 new messages
+                                <span class="float-right text-muted text-sm">3 mins</span>
+                            </a>
+                        </div>
+                    </li>
+                    <!-- /Notif -->
+
+                    <!-- Profile -->
+                    <li class="nav-item dropdown">
+                        <a data-toggle="dropdown" href="#">
+                            <img src="{{ asset('storage/' . Auth::user()->image) }}" class="img-circle elevation-2" alt="User Image"
+                                width="40" height="40">
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                            {{-- <div class="dropdown-divider"></div> --}}
+
+                            <a class="dropdown-item dropdown-footer disabled " style="font-weight: bold;"">Klien</a>
+
+
+                            {{-- <div class="dropdown-divider"></div> --}}
+                            <a href="{{ route ('profileklien') }}" class="dropdown-item dropdown-footer"><i
+                                    class="far fa-user mx-2"></i>Lihat
+                                Profil</a>
+                            <a class="dropdown-item dropdown-footer" href=""
+                                onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
+                            </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="GET" class="d-none">
+                                @csrf
+                            </form>
+
+                    </li>
+                @endif
             </ul>
 
         </nav>
@@ -276,6 +354,8 @@
 </body>
 
 </html>
+
+
 
 {{-- <body id="body-pd">
     <div id="app" >

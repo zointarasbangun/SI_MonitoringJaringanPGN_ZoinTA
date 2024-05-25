@@ -1,9 +1,12 @@
 @extends('layouts.app')
 @section('content')
+    <style>
+    </style>
+
     <div class="content-wrapper">
         <div class="container-fluid p-5" style="background-color:#1265A8">
             <div class="row">
-                <form action="{{ route('searchlog') }}" class="form-inline w-100" method="GET">
+                <form action="{{ route('searchstatuslog') }}" class="form-inline w-100" method="GET">
                     <div class="col-lg-3 col-sm-12 text-light">
                         <label for="cariData" class="large">Cari :
                             <input type="text" class="form-control ml-1" name="search" id="cariData"
@@ -25,48 +28,140 @@
                     </div>
 
                     <div class="col-lg-3 col-sm-12 d-flex justify-content-between align-items-center">
-                        @if (Auth::user()->role == 'admin')
-                            <div id="actionCari">
-                                <button class="btn btn-primary ml-1" type="submit"><i class="iconify"
-                                        data-icon="material-symbols:search"></i></button>
-
-                                <a href="{{ route('datalog') }}" class="btn btn-danger ml-1"><i class="iconify"
-                                        data-icon="solar:refresh-linear"></i></a>
-                            </div>
-
-
-                            <a href="{{ route('downloadexcel', request()->all()) }}" class="btn btn-success ml-1" type="button">
-                                <i class="iconify nav-icon" data-icon="mdi:file-excel"></i> Excel
-                            </a>
-                            <a href="{{ route('downloadpdf',request()->all()) }}" class="btn btn-danger ml-1" type="button">
-                                <i class="iconify nav-icon" data-icon="ant-design:file-pdf-filled"></i> PDF
-                            </a>
-                        @elseif(Auth::user()->role == 'teknisi')
-                            <div id="actionCari">
-                                <button class="btn btn-primary ml-1" type="submit"><i class="iconify"
-                                        data-icon="material-symbols:search"></i></button>
-                                <a href="{{ route('teknisi.datalog') }}" class="btn btn-danger ml-1"><i class="iconify"
-                                        data-icon="solar:refresh-linear"></i></a>
-                            </div>
-                        @elseif(Auth::user()->role == 'klien')
-                            <div id="actionCari">
-                                <button class="btn btn-primary ml-1" type="submit"><i class="iconify"
-                                        data-icon="material-symbols:search"></i></button>
-                                <a href="{{ route('klien.datalog', ['id' => auth()->user()->id]) }}"
-                                    class="btn btn-danger ml-1"><i class="iconify" data-icon="solar:refresh-linear"></i></a>
-                            </div>
-                        @endif
+                        <div id="actionCari">
+                            <button class="btn btn-primary ml-1" type="submit"><i class="iconify"
+                                    data-icon="material-symbols:search"></i></button>
+                            <a href="{{ route('datalog') }}" class="btn btn-danger ml-1"><i class="iconify"
+                                    data-icon="solar:refresh-linear"></i></a>
+                        </div>
                     </div>
-
                 </form>
-            </div>
 
+                @if (Auth::user()->role == 'admin')
+                @elseif(Auth::user()->role == 'teknisi')
+                    <div class="col-lg-2 col-sm-6 mt-4">
+                        <div class="float-right">
+                            <!-- Modal -->
+                            <div class="text-center">
+                                <a href="" class="btn btn-light btn-rounded " data-toggle="modal"
+                                    style="color:#12ACED" data-target="#modalLogPerbaikan">
+                                    <i class="iconify nav-icon mr-3" data-icon="line-md:document-add"></i>Tambah Laporan
+                                </a>
+                            </div>
+
+                            <div class="modal fade" id="modalLogPerbaikan" tabindex="-1" role="dialog"
+                                aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lgx`" role="document">
+                                    <div class="modal-content" style="color:white; background:#1265A8; padding:10px;">
+                                        <div class="modal-header text-start">
+                                            <h5 class="modal-title w-100 font-weight-bold">Data Laporan Perbaikan</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                                style="color: white;">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+
+                                        </div>
+                                        <form class="" method="POST" action="{{ route('teknisi.addlog') }}"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="modal-body mx-3">
+                                                <div class="mb-2">
+                                                    <i class="mr-3 fa-regular fa-user"></i>
+                                                    <label data-error="wrong" data-success="right"
+                                                        for="defaultForm-Username">Nama Teknisi</label>
+                                                    <input type="text" name="teknisi" id="defaultForm-username"
+                                                        class="form-control validate" placeholder="Input nama"
+                                                        value="{{ $namaTeknisi }}" style="color:black;" readonly>
+                                                </div>
+
+                                                <div class="mb-2">
+                                                    <i class="iconify nav-icon" data-icon="uil:server"></i>
+                                                    <label for="user_id" class="ml-3">Klien</label>
+                                                    <select class="custom-select form-control validate" id="user_id"
+                                                        name="user_id" aria-label="Default select example"
+                                                        style="color:black;">
+                                                        <option value="">none</option>
+                                                        @foreach ($user as $s)
+                                                            <option value="{{ $s->id }}">{{ $s->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-2">
+                                                    <i class="iconify nav-icon" data-icon="uil:server"></i>
+                                                    <label for="server" class="ml-3">Server</label>
+                                                    <select class="custom-select form-control validate" id="server_id"
+                                                        name="server_id" aria-label="Default select example"
+                                                        style="color:black;">
+                                                        <option value="">none</option>
+                                                        {{-- @foreach ($server as $s)
+                                                        <option value="{{ $s->id }}">
+                                                            {{ $s->nama_server }}</option>
+                                                    @endforeach --}}
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-2">
+                                                    <label for="device_id">Device</label>
+                                                    <select class="custom-select form-control validate" id="device_id"
+                                                        name="device_id" aria-label="Default select example"
+                                                        style="color:black;">
+                                                        <option value="">none</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-2">
+                                                    <label for="tanggal">Tanggal</label>
+                                                    <input type="date" name="tanggal" id="tanggal"
+                                                        class="form-control validate" style="color:black;">
+                                                </div>
+
+                                                <!-- Tambahkan kolom judul dengan nilai dari database -->
+                                                <div class="mb-2">
+                                                    <label for="judul">Judul</label>
+                                                    <select name="judul" id="judul" class="form-control validate"
+                                                        style="color:black;">
+                                                        @foreach (App\Models\Logperbaikan::getEnumValues('judul') as $judulValue)
+                                                            <option value="{{ $judulValue }}">{{ $judulValue }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    {{-- <input type="text" name="judul_manual" id="judul_manual"
+                                                    class="form-control mt-2" placeholder="Permasalahan lainnya" value=""> --}}
+                                                </div>
+
+
+                                                <!-- Tambahkan kolom keterangan -->
+                                                <div class="mb-2">
+                                                    <label for="keterangan">Keterangan</label>
+                                                    <textarea class="form-control validate" name="keterangan" id="keterangan" rows="3" style="color:black;"></textarea>
+                                                </div>
+
+                                                <!-- Tambahkan kolom foto -->
+                                                <div class="mb-2">
+                                                    <label for="foto">Foto</label>
+                                                    <input type="file" class="form-control-file" id="foto"
+                                                        name="foto">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer d-flex justify-content-center">
+                                                <button type="submit" class="btn btn-success">Tambah Laporan</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
         </div>
 
         <div class="container-fluid mt-3">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="card-title"><b>Data Log Perbaikan</b></h1>
+                    <h1 class="card-title"><b>Status Log Perbaikan</b></h1>
                 </div>
                 <!-- table -->
                 @if (session('success'))
@@ -94,11 +189,7 @@
                                 <th scope="col">Foto</th>
                                 <th scope="col">Status Log</th>
                                 <th scope="col">Status Admin</th>
-                                @if (Auth::user()->role == 'admin')
-                                    <th scope="col">Aksi</th>
-                                @elseif (Auth::user()->role == 'teknisi')
-                                @endif
-
+                                <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -220,16 +311,24 @@
                                             </span>
                                         @endif
                                     </td>
-                                    @if (Auth::user()->role == 'admin')
-                                        <td>
+                                    <td>
+                                        @if (Auth::user()->role == 'admin')
+                                            <button class="btn btn-success ml-1"
+                                                onclick="confirmApproval({{ $d->id }})"><i
+                                                    class="fas fa-check"></i>
+                                            </button>
+                                            <button class="btn btn-danger ml-1"
+                                                onclick="confirmRejection({{ $d->id }})">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        @elseif (Auth::user()->role == 'teknisi')
                                             <a href=" {{ route('teknisi.editlog', ['id' => $d->id]) }}"
                                                 class="btn btn-primary"><i class= "fas fa-pen"></i></a>
                                             <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
                                                 class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
-                                        @elseif(Auth::user()->role == 'teknisi')
-                                    @endif
-                                    {{-- <a href="#" class="btn btn-primary">
+                                            {{-- <a href="#" class="btn btn-primary">
                                         <i class="fa-solid fa-map-location-dot"></i></a> --}}
+                                        @endif
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="modal-hapus{{ $d->id }}">
@@ -336,5 +435,64 @@
                 }
             });
         });
+
+        function confirmApproval(id) {
+            if (confirm("Anda yakin ingin menyetujui laporan ini?")) {
+                approveLaporan(id);
+            } else {
+                alert("Persetujuan dibatalkan.");
+            }
+        }
+
+        function confirmRejection(id) {
+            if (confirm("Anda yakin ingin menolak laporan ini?")) {
+                rejectLaporan(id);
+            } else {
+                alert("Penolakan dibatalkan.");
+            }
+        }
+
+        function approveLaporan(id) {
+            $.ajax({
+                type: "POST",
+                url: '/approve-laporan/' + id,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                },
+                success: function(data) {
+                    alert(data.message);
+                    // Setelah berhasil, Anda dapat memperbarui tampilan atau memberikan notifikasi kepada pengguna
+                    // ...
+
+                    // Contoh: Reload halaman
+                    window.location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert("Terjadi kesalahan saat menyetujui perjalanan.");
+                }
+            });
+        }
+
+        function rejectLaporan(id) {
+            $.ajax({
+                type: "POST",
+                url: '/reject-laporan/' + id,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                },
+                success: function(data) {
+                    alert(data.message);
+                    // Setelah berhasil, Anda dapat memperbarui tampilan atau memberikan notifikasi kepada pengguna
+                    // ...
+                    // Contoh: Reload halaman
+                    window.location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert("Terjadi kesalahan saat menolak lapaoran.");
+                }
+            });
+        }
     </script>
 @endsection

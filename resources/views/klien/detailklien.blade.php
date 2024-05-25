@@ -5,31 +5,9 @@
         <div class="container-fluid ">
             <div class="row p-5" style="margin-bottom : 20px; background-color: #1265A8; ">
 
-                <div class="col-lg-4 col-sm-6">
-                    <form action="/kendaraan/search" class="form-inline" method="GET">
-                        <div class="input-group " style="flex-grow: 10;">
-                            <input type="search" class="form-control mr-10" style="width: 200px;" name="search"
-                                id="cariDataKendaraan" placeholder="Cari Data Klien...">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary ml-1" type="submit"><i class="iconify"
-                                        data-icon="material-symbols:search"></i> Cari</button>
-                                @if (Auth::user()->role == 'admin')
-                                    <a href="" class="btn btn-danger ml-1"><i class="iconify"
-                                            data-icon="solar:refresh-linear"></i> Reset</a>
-                                @else
-                                    <a href="/tipeKendaraanUser" class="btn btn-danger ml-1"><i class="iconify"
-                                            data-icon="solar:refresh-linear"></i> Reset</a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <!-- Tambahkan kolom kosong untuk mempertahankan jarak -->
-                </div>
                 @if (Auth::user()->role == 'admin')
                     <div class="col-lg-4 col-sm-12">
-                        <div class="float-right">
+                        <div class="float-left">
 
                             <!-- Button Modal -->
                             <div class="text-center">
@@ -190,17 +168,6 @@
                                                         class="form-control validate" placeholder="Input password">
                                                 </div>
 
-                                                {{-- <div class="mb-2">
-                                                <div class="d-flex align-items-center">
-                                                    <i class="iconify nav-icon" data-icon="uil:server"></i>
-                                                    <label for="server" class="ml-3">Server:</label>
-                                                    <select id="server" class="form-select border-0 w-50 ml-3"
-                                                        aria-label="Default select example">
-                                                        <option selected value="lampung selatan">Lampung Selatan</option>
-                                                        <option value="bandar lampung">Bandar Lampung</option>
-                                                    </select>
-                                                </div>
-                                            </div> --}}
 
 
 
@@ -294,7 +261,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="{{ route('monitoringlokasi', ['id' => $d->id]) }}"
+                                        <a href="{{ route('teknisi.klienlokasi', ['id' => $d->id]) }}"
                                             class="btn btn-success">Lihat lokasi <i
                                                 class= "fa-solid fa-map-location-dot"></i></a>
                                     </td>

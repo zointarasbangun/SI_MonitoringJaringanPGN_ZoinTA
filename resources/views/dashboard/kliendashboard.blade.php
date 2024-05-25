@@ -20,20 +20,21 @@
     <div class="content-wrapper">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12 connectedSortable" style="margin-bottom : 20px; background-color: #1265A8; color: #fff;">
+                <div class="col-lg-12 connectedSortable"
+                    style="margin-bottom : 20px; background-color: #1265A8; color: #fff;">
                     <h3 style="margin-top: 30px; margin-left: 30px; font-weight: bold;">Klien</h3>
                     <div class="container fluid ">
                         <div class="row d-flex justify-content-around">
                             <div class="col-lg-3 col-md-6">
                                 <div class="small-box bg-white text-center d-flex flex-column "
-                                    style="font-weight: bold; padding: 20px;">
+                                    style="font-weight: bold; padding: 20px; ">
                                     <div class="d-flex align-items-center justify-content-end mb-3">
-                                        <h4 style="margin-bottom: 0;">Total Klien</h4>
+                                        <h4 style="margin-bottom: 0;color: #1265A8;">Total Klien</h4>
                                         <i class="iconify nav-icon ml-auto" data-icon="fa6-solid:users"
                                             style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
-                                    <p style="font-size: 36px">
-                                        11</p>
+                                    <p style="font-size: 36px;color: #1265A8;">
+                                        {{ $klien }}</p>
                                 </div>
                             </div>
 
@@ -41,12 +42,12 @@
                                 <div class="small-box bg-white text-center d-flex flex-column "
                                     style="font-weight: bold; padding: 20px;">
                                     <div class="d-flex align-items-center justify-content-end mb-3">
-                                        <h4 style="margin-bottom: 0;">Total Perangkat</h4>
+                                        <h4 style="margin-bottom: 0;color: #1265A8;">Total Perangkat</h4>
                                         <i class="iconify nav-icon ml-auto" data-icon="mingcute:location-3-line"
                                             style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
-                                    <p style="font-size: 36px">
-                                        11</p>
+                                    <p style="font-size: 36px;color: #1265A8;">
+                                        {{ $device }}</p>
                                 </div>
                             </div>
 
@@ -54,12 +55,12 @@
                                 <div class="small-box bg-white text-center d-flex flex-column "
                                     style="font-weight: bold; padding: 20px;">
                                     <div class="d-flex align-items-center justify-content-end mb-3">
-                                        <h4 style="margin-bottom: 0;">Perangkat Klien</h4>
+                                        <h4 style="margin-bottom: 0;color: #1265A8;">Perangkat Saya</h4>
                                         <i class="iconify nav-icon ml-auto" data-icon="mingcute:location-3-line"
                                             style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
-                                    <p style="font-size: 36px;">
-                                        11</p>
+                                    <p style="font-size: 36px;color: #1265A8;">
+                                        {{ $deviceCount }}</p>
                                 </div>
                             </div>
 
@@ -67,12 +68,12 @@
                                 <div class="small-box bg-white text-center d-flex flex-column "
                                     style="font-weight: bold; padding: 20px;">
                                     <div class="d-flex align-items-center justify-content-end mb-3">
-                                        <h4 style="margin-bottom: 0;">Total Teknisi</h4>
+                                        <h4 style="margin-bottom: 0;color: #1265A8;">Total Teknisi</h4>
                                         <i class="iconify nav-icon ml-auto" data-icon="fa-solid:users-cog"
                                             style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
-                                    <p style="font-size: 36px">
-                                        11</p>
+                                    <p style="font-size: 36px;color: #1265A8;">
+                                        {{ $teknisi }}</p>
                                 </div>
                             </div>
 
@@ -84,81 +85,153 @@
             </div>
         </div>
         <div class="container-fluid">
-            {{-- <div class="col-12">
-                    <a href="{{ route('create') }}" class="btn btn-primary mb-3">Tambah Data Produk</a> --}}
             <div class="card">
                 <div class="card-header">
-                    <h1 class="card-title"><b>List Klien</b></h1>
+                    <h1 class="card-title"><b>List Perangkat</b></h1>
                 </div>
-                <!-- /.card-header -->
-                <div class="container-fluid mt-3">
-                    <div class="card-body table-responsive p-0">
-                        <table class="table table-striped text-center" id="tableakun">
-                            <thead>
+                <!-- table -->
+                <div class="container-fluid ">
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    <table class="table table-striped text-center" id="tablecar">
+                        <thead>
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">Nama Perangkat</th>
+                                <th scope="col">Alamat IP</th>
+                                <th scope="col">status</th>
+                                <th scope="col">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($data as $index => $d)
                                 <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">Nama Klien</th>
-                                    <th scope="col">Kontak</th>
-                                    <th scope="col">Alamat</th>
-                                    <th scope="col">Server</th>
-                                    <th scope="col">Perangkat</th>
-                                    <th scope="col">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $d->nama_perangkat }}</td>
+                                    <td> {{ $d->ip_perangkat }}</td>
+                                    <td id="status-{{ $d->id }}">
+                                        @if ($d->status === true)
+                                            <span class="badge bg-success">
+                                                Terhubung
+                                            </span>
+                                        @elseif($d->status == 'waiting')
+                                            <div class="spinner-border text-secondary" role="status">
+                                                <span class="visually-hidden"> </span>
+                                            </div>
+                                        @else
+                                            <span class="badge bg-danger">
+                                                Tidak Terhubung
+                                            </span>
+                                        @endif
+                                    </td>
+                                    @if (Auth::user()->role == 'admin')
                                         <td>
-                                            <a href="" class="btn btn-success"><i
+                                            <a href="{{ route('editDevice', ['id' => $d->id]) }}"
+                                                class="btn btn-primary"><i class= "fas fa-pen"></i></a>
+                                            <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
+                                                class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
+                                            <a href="{{ route('monitoringlokasi', ['id' => $d->id]) }}"
+                                                class="btn btn-success"> <i class= "fa-solid fa-map-location-dot"></i></a>
+                                        </td>
+                                    @elseif (Auth::user()->role == 'teknisi')
+                                        <td>
+                                            <a href="{{ route('teknisi.monitoringlokasi', ['id' => $d->id]) }}"
+                                                class="btn btn-success">Lihat lokasi <i
+                                                    class= "fa-solid fa-map-location-dot"></i></a>
+                                            {{-- <a href="#" class="btn btn-primary">
+                                        <i class="fa-solid fa-map-location-dot"></i></a> --}}
+                                        </td>
+                                    @else
+                                        <td>
+                                            <a href="{{ route('klien.monitoringlokasi', ['id' => auth()->user()->id]) }}"
+                                                class="btn btn-success">Lihat lokasi <i
                                                     class= "fa-solid fa-map-location-dot"></i></a>
                                         </td>
-                                    </tr>
-                                    <div class="modal fade" id="modal-hapus">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Default Modal</h4>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Apakah Anda yakin ingin menghapus data user
-                                                        <b></b>
-                                                    </p>
-                                                </div>
-                                                <div class="modal-footer justify-content-between">
-                                                    <form action="" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button" class="btn btn-default"
-                                                            data-dismiss="modal">Batal</button>
-                                                        <button type="submit" class="btn btn-primary">Ya,
-                                                            Hapus</button>
-
-                                                    </form>
-
-                                                </div>
+                                    @endif
+                                </tr>
+                                <div class="modal fade" id="modal-hapus{{ $d->id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Default Modal</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
-                                            <!-- /.modal-content -->
+                                            <div class="modal-body">
+                                                <p>Apakah Anda yakin ingin menghapus data perangkat
+                                                    <b>{{ $d->nama_perangkat }}</b>
+                                                </p>
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <form action="{{ route('deleteDevice', ['id' => $d->id]) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-primary">Ya,
+                                                        Hapus</button>
+
+                                                </form>
+
+                                            </div>
                                         </div>
-                                        <!-- /.modal-dialog -->
+                                        <!-- /.modal-content -->
                                     </div>
-                                    <!-- /.modal -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                <!-- /.modal -->
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <!-- /.card -->
         </div>
-    </div>
     </div><!-- /.container-fluid -->
+@endsection
+
+@section('js')
+    <script>
+        var data = @json($data);
+
+        function tesPing() {
+
+            data.forEach(d => {
+                $.ajax({
+                    type: "get",
+                    url: "{{ route('tespingajax') }}",
+                    data: {
+                        ip: d.ip_perangkat
+                    },
+                    success: function(status) {
+                        if (status == true) {
+                            $("[id='status-" + d.id + "']").html(
+                                "<span class='badge bg-success'>Terhubung</span>")
+                        } else {
+                            $("[id='status-" + d.id + "']").html(
+                                "<span class='badge bg-danger'>Tidak Terhubung</span>")
+                        }
+
+                    }
+                })
+            });
+        }
+
+        $(document).ready(function() {
+            tesPing()
+            setInterval(tesPing, 30000);
+            // $("[id='status-25']").html("<span class='badge bg-success'>Terhubung</span>")
+        })
+    </script>
 @endsection

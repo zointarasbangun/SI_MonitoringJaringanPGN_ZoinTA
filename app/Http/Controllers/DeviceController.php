@@ -14,9 +14,6 @@ class DeviceController extends Controller
         $user = User::where('role', 'klien')->get();
 
         foreach ($data as $perangkat) {
-            //tesping
-            // $hasil_test_ping = $this->tesPing($perangkat->ip_perangkat);
-            //masukkan hasil ke dalam array
             $perangkat->status = 'waiting';
         }
 
@@ -124,7 +121,7 @@ class DeviceController extends Controller
             ->with('user') // Memuat data pengguna terkait dengan setiap perangkat
             ->get();
 
-        
+
         // Mengambil data pengguna dengan peran 'klien'
         $user = User::where('role', 'klien')->get();
 
@@ -132,7 +129,23 @@ class DeviceController extends Controller
         return view('device.detailperangkat', compact('data', 'user'));
     }
 
+    public function kliendataDevice($userId)
+    {
+        $data = Device::whereHas('user', function ($query) use ($userId) {
+            $query->where('id', $userId);
+        })
+            ->get();
+        $user = User::where('role', 'klien')->get();
 
+        foreach ($data as $perangkat) {
+            //tesping
+            // $hasil_test_ping = $this->tesPing($perangkat->ip_perangkat);
+            //masukkan hasil ke dalam array
+            $perangkat->status = 'waiting';
+        }
+
+        return view('device.perangkat', compact('data', 'user'));
+    }
 
 
     public function tesPing($alamat_ip)
@@ -166,5 +179,6 @@ class DeviceController extends Controller
 
             return false;
     }
+
 }
 

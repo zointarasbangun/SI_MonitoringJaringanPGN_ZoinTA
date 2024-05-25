@@ -5,18 +5,18 @@
             <div class="row p-5" style=" margin-bottom : 20px; background-color: #1265A8; ">
 
                 <div class="col-lg-6 col-sm-6">
-                    <form action="/kendaraan/search" class="form-inline" method="GET">
+                    <form action="{{ route('searchakun') }}" class="form-inline" method="GET">
                         <div class="input-group ">
-                            <input type="search" class="form-control" name="search"
-                                id="cariDataKendaraan" placeholder="Cari Data Akun...">
+                            <input type="search" class="form-control" name="search" id="cariDataAkun"
+                                placeholder="Cari Data Akun...">
                             <div class="input-group-append">
                                 <button class="btn btn-primary ml-1" type="submit"><i class="iconify"
                                         data-icon="material-symbols:search"></i> Cari</button>
                                 @if (Auth::user()->role == 'admin')
-                                    <a href="" class="btn btn-danger ml-1"><i class="iconify"
+                                    <a href="{{ route('dataAkun') }}" class="btn btn-danger ml-1"><i class="iconify"
                                             data-icon="solar:refresh-linear"></i> Reset</a>
                                 @else
-                                    <a href="/tipeKendaraanUser" class="btn btn-danger ml-1"><i class="iconify"
+                                    <a href=" " class="btn btn-danger ml-1"><i class="iconify"
                                             data-icon="solar:refresh-linear"></i> Reset</a>
                                 @endif
                             </div>

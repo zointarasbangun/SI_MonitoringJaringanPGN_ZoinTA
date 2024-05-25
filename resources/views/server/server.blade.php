@@ -6,7 +6,7 @@
             <div class="row p-5" style=" margin-bottom : 20px; background-color: #1265A8; ">
 
                 <div class="col-lg-4 col-sm-6">
-                    <form action="/kendaraan/search" class="form-inline" method="GET">
+                    <form action="{{ route('searchserver') }}" class="form-inline" method="GET">
                         <div class="input-group " style="flex-grow: 10;">
                             <input type="search" class="form-control mr-10" style="width: 200px;" name="search"
                                 id="cariDataKendaraan" placeholder="Cari Data Server...">
@@ -14,10 +14,10 @@
                                 <button class="btn btn-primary ml-1" type="submit"><i class="iconify"
                                         data-icon="material-symbols:search"></i> Cari</button>
                                 @if (Auth::user()->role == 'admin')
-                                    <a href="" class="btn btn-danger ml-1"><i class="iconify"
+                                    <a href="{{ route('dataServer') }}" class="btn btn-danger ml-1"><i class="iconify"
                                             data-icon="solar:refresh-linear"></i> Reset</a>
-                                @else
-                                    <a href="/tipeKendaraanUser" class="btn btn-danger ml-1"><i class="iconify"
+                                @elseif (Auth::user()->role == 'teknisi')
+                                    <a href="{{ route('teknisi.dataServer') }}" class="btn btn-danger ml-1"><i class="iconify"
                                             data-icon="solar:refresh-linear"></i> Reset</a>
                                 @endif
                             </div>
@@ -141,7 +141,7 @@
                                                 class= "fas fa-pen"></i></a>
                                         <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
                                             class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
-                                        <a href="{{ route('editKlien', ['id' => $d->id]) }}" class="btn btn-success"><i
+                                        <a href="{{ route('serverlokasi', ['id' => $d->id]) }}" class="btn btn-success"><i
                                                 class= "fa-solid fa-map-location-dot"></i></a>
                                         {{-- <a href="#" class="btn btn-primary">
                                         <i class="fa-solid fa-map-location-dot"></i></a> --}}
@@ -154,7 +154,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="{{ route('monitoringlokasi', ['id' => $d->id]) }}"
+                                        <a href="{{ route('teknisi.serverlokasi', ['id' => $d->id]) }}"
                                             class="btn btn-success">Lihat lokasi <i
                                                 class= "fa-solid fa-map-location-dot"></i></a>
                                     </td>

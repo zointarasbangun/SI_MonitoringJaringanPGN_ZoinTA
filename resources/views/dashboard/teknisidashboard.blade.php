@@ -34,7 +34,7 @@
                                             style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
                                     <p style="font-size: 36px; color: #1265A8;">
-                                        11</p>
+                                        {{ $server->count() }}</p>
                                 </div>
                             </div>
 
@@ -47,7 +47,7 @@
                                             style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
                                     <p style="font-size: 36px; color: #1265A8;">
-                                        11</p>
+                                        {{ $klien->count() }}</p>
                                 </div>
                             </div>
 
@@ -60,7 +60,7 @@
                                             style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
                                     <p style="font-size: 36px;color: #1265A8;">
-                                        11</p>
+                                        {{ $teknisi->count() }}</p>
                                 </div>
                             </div>
 
@@ -73,7 +73,7 @@
                                             style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
                                     <p style="font-size: 36px;color: #1265A8;">
-                                        11</p>
+                                        {{ $device->count() }}</p>
                                 </div>
                             </div>
 
@@ -127,7 +127,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{ route('teknisi.monitoringlokasi', ['id' => $d->id]) }}"
+                                            <a href="{{ route('teknisi.klienlokasi', ['id' => $d->id]) }}"
                                                 class="btn btn-success">Lihat lokasi <i
                                                     class= "fa-solid fa-map-location-dot"></i></a>
                                         </td>
