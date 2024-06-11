@@ -147,8 +147,47 @@ class LogController extends Controller
 
         // Simpan log perbaikan
         $logPerbaikan->save();
-        
+
         return redirect()->route('teknisi.statuslog');
+    }
+    public function editlog($id)
+    {
+        $log = logperbaikan::findOrFail($id);
+        $user = User::where('role', 'klien')->get();
+        $server = Server::all();
+        $device = Device::all();
+
+        $namaTeknisi = Auth::user()->name;
+
+        // Mengembalikan view 'admin.editAkun' dan menyertakan data user
+        return view('logperbaikan.editlog', compact('log', 'user', 'server', 'device', 'namaTeknisi'));
+    }
+
+    public function updatelog($id)
+    {
+        // 1. Ambil data log berdasarkan ID
+        $log = LogPerbaikan::findOrFail($id);
+
+        // 2. Validasi data dari permintaan
+        $validatedData = request()->validate([
+            'teknisi' => 'required',
+            'user_id' => 'required',
+            'server_id' => 'required',
+            'device_id' => 'required',
+            'tanggal' => 'required|date',
+            'judul' => 'nullable',
+            'keterangan' => 'nullable',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5000',
+        ]);
+
+        // 3. Lakukan pembaruan data log
+        $log->update($validatedData);
+
+        // 4. Simpan perubahan
+        $log->save();
+
+        // 5. Redirect pengguna ke halaman atau rute yang sesuai
+        return redirect()->route('teknisi.statuslog')->with('success', 'Log berhasil diperbarui.');
     }
 
     public function teknisieditlog($id)
@@ -190,6 +229,13 @@ class LogController extends Controller
         return redirect()->route('teknisi.statuslog')->with('success', 'Log berhasil diperbarui.');
     }
 
+    public function deleteLog(string $id)
+    {
+        $data = logperbaikan::findOrFail($id);
+        $data->delete();
+
+        return redirect()->route('datalog');
+    }
     public function teknisideleteLog(string $id)
     {
         $data = logperbaikan::findOrFail($id);
@@ -364,9 +410,50 @@ class LogController extends Controller
 
         $log = $query->get();
 
-        $pdf = PDF::loadView('downloads.pdf',compact('log'));
+        $pdf = PDF::loadView('downloads.pdf', compact('log'));
 
         return $pdf->download('datalog.pdf');
+    }
+
+    public function teknisiexport_pdf(Request $request)
+    {
+        $namaTeknisi = Auth::user()->name;
+        $user = User::whereNotIn('role', ['admin', 'teknisi'])->get();
+        $server = Server::all();
+        $device = Device::all();
+        $search = $request->input('search');
+        $cariTanggalAwal = $request->input('cariTanggalAwal');
+        $cariTanggalAkhir = $request->input('cariTanggalAkhir');
+
+        $query = LogPerbaikan::with(['userlog', 'serverlog', 'devicelog'])->whereNot('statusadmin', 'menunggu')->where('teknisi', $namaTeknisi);
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('userlog', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('serverlog', function ($q) use ($search) {
+                    $q->where('nama_server', 'LIKE', '%' . $search . '%');
+                })->orWhereHas('devicelog', function ($q) use ($search) {
+                    $q->where('nama_perangkat', 'LIKE', '%' . $search . '%');
+                })->orWhere('statusadmin', 'LIKE', '%' . $search . '%')
+                    ->orWhere('tanggal', 'LIKE', '%' . $search . '%')
+                    ->orWhere('teknisi', 'LIKE', '%' . $search . '%')
+                    ->orWhere('foto', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        if ($cariTanggalAwal && $cariTanggalAkhir) {
+            $query->whereBetween('tanggal', [$cariTanggalAwal, $cariTanggalAkhir]);
+        } elseif ($cariTanggalAwal) {
+            $query->where('tanggal', '>=', $cariTanggalAwal);
+        } elseif ($cariTanggalAkhir) {
+            $query->where('tanggal', '<=', $cariTanggalAkhir);
+        }
+
+        $log = $query->get();
+
+        $pdf = PDF::loadView('downloads.pdf', compact('log'));
+
+        return $pdf->download('riwayatlog.pdf');
     }
 
 }

@@ -50,7 +50,7 @@
                                             </button>
 
                                         </div>
-                                        <form class="" method="POST" action="{{ route('tambahKlien') }}">
+                                        <form class="" method="POST" action="{{ route('tambahKlien') }}" enctype="multipart/form-data">
                                             @csrf
                                             <div class="modal-body mx-3">
                                                 <div class="mb-2">
@@ -139,7 +139,13 @@
                                                     </select>
                                                 </div>
 
-
+                                                <div class="mb-2">
+                                                    <i class="mr-3 fa-regular fa-user"></i>
+                                                    <label data-error="wrong" data-success="right"
+                                                        for="defaultForm-Username">Logo</label>
+                                                    <input type="file" name="image" id="image"
+                                                        class="form-control validate" style="color:black;">
+                                                </div>
 
                                             </div>
                                             <div class="modal-footer d-flex justify-content-center">

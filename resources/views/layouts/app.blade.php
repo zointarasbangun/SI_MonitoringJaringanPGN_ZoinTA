@@ -134,27 +134,38 @@
 
                 <!-- Notif -->
                 @if (Auth::user()->role == 'admin')
-                    <li class="nav-item dropdown mr-4">
-                        <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
-                            <i class="far fa-bell"></i>
-                            <span class="badge badge-warning ">15</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            {{-- <span class="dropdown-item dropdown-header disabled ">15 Notifications</span> --}}
+                <li class="nav-item dropdown mr-4">
+                    <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell"></i>
+                        @if (isset($notifikasiCount) && $notifikasiCount > 0)
+                            <span class="badge badge-warning">{{ $notifikasiCount }}</span>
+                        @endif
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        @if (isset($notifikasiTerbaru) && $notifikasiTerbaru->count() > 0)
+                            @foreach ($notifikasiTerbaru as $notifikasi)
+                                <div class="dropdown-divider"></div>
+                                <a href="{{ route('notifikasi') }}" class="dropdown-item">
+                                    <i class="fas fa-envelope mr-2"></i> <span class="badge bg-danger">
+                                        {{ $notifikasi->message }}
+                                    </span>
+                                    <span
+                                        class="float-right text-muted text-sm">{{ $notifikasi->created_at->diffForHumans() }}</span>
+                                </a>
+                            @endforeach
+                        @else
                             <div class="dropdown-divider"></div>
-                            <a href="/notifikasi" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> 4 new messages
-                                <span class="float-right text-muted text-sm">3 mins</span>
-                            </a>
-                        </div>
-                    </li>
+                            <a href="#" class="dropdown-item text-center">Tidak ada notifikasi</a>
+                        @endif
+                    </div>
+                </li>
                     <!-- /Notif -->
 
                     <!-- Profile -->
                     <li class="nav-item dropdown">
                         <a data-toggle="dropdown" href="#">
-                            <img src="{{ asset('storage/' . Auth::user()->image) }}" class="img-circle elevation-2" alt="User Image"
-                                width="40" height="40">
+                            <img src="{{ asset('storage/' . Auth::user()->image) }}" class="img-circle elevation-2"
+                                alt="User Image" width="40" height="40">
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
@@ -179,27 +190,38 @@
 
                     </li>
                 @elseif(Auth::user()->role == 'teknisi')
-                    <li class="nav-item dropdown mr-4">
-                        <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
-                            <i class="far fa-bell"></i>
-                            <span class="badge badge-warning ">15</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            {{-- <span class="dropdown-item dropdown-header disabled ">15 Notifications</span> --}}
+                <li class="nav-item dropdown mr-4">
+                    <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell"></i>
+                        @if (isset($notifikasiCount) && $notifikasiCount > 0)
+                            <span class="badge badge-warning">{{ $notifikasiCount }}</span>
+                        @endif
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        @if (isset($notifikasiTerbaru) && $notifikasiTerbaru->count() > 0)
+                            @foreach ($notifikasiTerbaru as $notifikasi)
+                                <div class="dropdown-divider"></div>
+                                <a href="{{ route('teknisi.notifikasi') }}" class="dropdown-item">
+                                    <i class="fas fa-envelope mr-2"></i> <span class="badge bg-danger">
+                                        {{ $notifikasi->message }}
+                                    </span>
+                                    <span
+                                        class="float-right text-muted text-sm">{{ $notifikasi->created_at->diffForHumans() }}</span>
+                                </a>
+                            @endforeach
+                        @else
                             <div class="dropdown-divider"></div>
-                            <a href="/notifikasi" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> 4 new messages
-                                <span class="float-right text-muted text-sm">3 mins</span>
-                            </a>
-                        </div>
-                    </li>
+                            <a href="#" class="dropdown-item text-center">Tidak ada notifikasi</a>
+                        @endif
+                    </div>
+                </li>
                     <!-- /Notif -->
 
                     <!-- Profile -->
                     <li class="nav-item dropdown">
                         <a data-toggle="dropdown" href="#">
-                            <img src="{{ asset('storage/' . Auth::user()->image) }}" class="img-circle elevation-2" alt="User Image"
-                                width="40" height="40">
+                            <img src="{{ asset('storage/' . Auth::user()->image) }}" class="img-circle elevation-2"
+                                alt="User Image" width="40" height="40">
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
@@ -221,21 +243,32 @@
                             <form id="logout-form" action="{{ route('logout') }}" method="GET" class="d-none">
                                 @csrf
                             </form>
-
+                        </div>
                     </li>
                 @else
                     <li class="nav-item dropdown mr-4">
                         <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
                             <i class="far fa-bell"></i>
-                            <span class="badge badge-warning ">15</span>
+                            @if (isset($notifikasiCount) && $notifikasiCount > 0)
+                                <span class="badge badge-warning">{{ $notifikasiCount }}</span>
+                            @endif
                         </a>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            {{-- <span class="dropdown-item dropdown-header disabled ">15 Notifications</span> --}}
-                            <div class="dropdown-divider"></div>
-                            <a href="/notifikasi" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> 4 new messages
-                                <span class="float-right text-muted text-sm">3 mins</span>
-                            </a>
+                            @if (isset($notifikasiTerbaru) && $notifikasiTerbaru->count() > 0)
+                                @foreach ($notifikasiTerbaru as $notifikasi)
+                                    <div class="dropdown-divider"></div>
+                                    <a href="{{ route('klien.notifikasi') }}" class="dropdown-item">
+                                        <i class="fas fa-envelope mr-2"></i> <span class="badge bg-danger">
+                                            {{ $notifikasi->message }}
+                                        </span>
+                                        <span
+                                            class="float-right text-muted text-sm">{{ $notifikasi->created_at->diffForHumans() }}</span>
+                                    </a>
+                                @endforeach
+                            @else
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item text-center">Tidak ada notifikasi</a>
+                            @endif
                         </div>
                     </li>
                     <!-- /Notif -->
@@ -243,8 +276,8 @@
                     <!-- Profile -->
                     <li class="nav-item dropdown">
                         <a data-toggle="dropdown" href="#">
-                            <img src="{{ asset('storage/' . Auth::user()->image) }}" class="img-circle elevation-2" alt="User Image"
-                                width="40" height="40">
+                            <img src="{{ asset('storage/' . Auth::user()->image) }}" class="img-circle elevation-2"
+                                alt="User Image" width="40" height="40">
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
@@ -254,7 +287,7 @@
 
 
                             {{-- <div class="dropdown-divider"></div> --}}
-                            <a href="{{ route ('profileklien') }}" class="dropdown-item dropdown-footer"><i
+                            <a href="{{ route('profileklien') }}" class="dropdown-item dropdown-footer"><i
                                     class="far fa-user mx-2"></i>Lihat
                                 Profil</a>
                             <a class="dropdown-item dropdown-footer" href=""

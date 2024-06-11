@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Device;
+use App\Models\Notifikasi;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,15 +21,15 @@ class MonitoringController extends Controller
 
     public function dataServer()
     {
-        // Ambil data server yang terkait dengan pengguna yang memiliki peran 'klien'
-        $servers = Server::withCount('users')->whereHas('users', function ($query) {
-            $query->where('role', 'klien');
-        })->get();
+        // Ambil semua server dan hitung jumlah pengguna dengan peran 'klien' untuk setiap server
+        $servers = Server::withCount([
+            'users' => function ($query) {
+                $query->where('role', 'klien');
+            }
+        ])->get();
 
         return view('monitoring.serverlokasi', compact('servers'));
     }
-
-
 
     public function dataMonitoring()
     {
@@ -36,14 +37,19 @@ class MonitoringController extends Controller
             $query->where('role', 'klien');
         })->with('user')->get();
 
+        foreach ($perangkats as $perangkat) {
+
+            $perangkat->status = 'waiting';
+        }
+
         return view('monitoring.perangkatlokasi', compact('perangkats'));
     }
 
     public function teknisidataKlien()
     {
-        $user = User::with(['device'])->where('role', 'klien')->get();
+        $users = User::withCount('device')->where('role', 'klien')->get();
 
-        return view('monitoring.klienlokasi', compact('user'));
+        return view('monitoring.klienlokasi', compact('users'));
     }
 
     public function teknisidataServer()
@@ -99,12 +105,13 @@ class MonitoringController extends Controller
 
         // print_r($output);
 
-        if ($result == 0)
+        if ($result == 0) {
 
             return true;
-        else
-
+        } else {
+            Notifikasi::create(['device_id' => $request->id, 'message' => 'perangkat tidak terhubung']);
             return false;
+        }
     }
 
 }

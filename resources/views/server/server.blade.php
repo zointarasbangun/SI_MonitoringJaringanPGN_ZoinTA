@@ -131,7 +131,7 @@
                                 @if (Auth::user()->role == 'admin')
                                     <td>
                                         <a href="{{ route('detailKlien', ['id' => $d->id]) }}"
-                                            class="btn btn-info">{{ $d->user->count() }} <i
+                                            class="btn btn-info">{{ $d->users->count() }} <i
                                                 class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
                                         </a>
                                     </td>
@@ -149,7 +149,7 @@
                                 @elseif(Auth::user()->role == 'teknisi')
                                     <td>
                                         <a href="{{ route('teknisi.detailKlien', ['id' => $d->id]) }}"
-                                            class="btn btn-info">{{ $d->user->count() }} <i
+                                            class="btn btn-info">{{ $d->users->count() }} <i
                                                 class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
                                         </a>
                                     </td>

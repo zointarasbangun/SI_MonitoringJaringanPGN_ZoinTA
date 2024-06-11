@@ -94,7 +94,7 @@
                             </ul>
                         </li>
                         <li id="menu-notifikasi" class="nav-item ">
-                            <a href="/notifikasi" class="nav-link ">
+                            <a href="{{ route('notifikasi') }}" class="nav-link ">
                                 <i class="iconify nav-icon" data-icon="mdi:bell-warning"></i>
                                 <p>Notifikasi</p>
                             </a>
@@ -198,7 +198,7 @@
                             </ul>
                         </li>
                         <li id="menu-notifikasi" class="nav-item ">
-                            <a href="/notifikasi" class="nav-link ">
+                            <a href=" {{ route('teknisi.notifikasi') }}" class="nav-link ">
                                 <i class="iconify nav-icon" data-icon="mdi:bell-warning"></i>
                                 <p>Notifikasi</p>
                             </a>
@@ -246,7 +246,7 @@
                             </a>
                         </li>
                         <li id="menu-notifikasi" class="nav-item ">
-                            <a href="/notifikasi" class="nav-link ">
+                            <a href="{{ route('klien.notifikasi') }}" class="nav-link ">
                                 <i class="iconify nav-icon" data-icon="mdi:bell-warning"></i>
                                 <p>Notifikasi</p>
                             </a>

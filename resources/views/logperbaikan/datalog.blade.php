@@ -222,7 +222,7 @@
                                     </td>
                                     @if (Auth::user()->role == 'admin')
                                         <td>
-                                            <a href=" {{ route('teknisi.editlog', ['id' => $d->id]) }}"
+                                            <a href=" {{ route('editlog', ['id' => $d->id]) }}"
                                                 class="btn btn-primary"><i class= "fas fa-pen"></i></a>
                                             <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
                                                 class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
@@ -248,7 +248,7 @@
                                                 </p>
                                             </div>
                                             <div class="modal-footer justify-content-between">
-                                                <form action="{{ route('teknisi.deletelog', ['id' => $d->id]) }}"
+                                                <form action="{{ route('deletelog', ['id' => $d->id]) }}"
                                                     method="POST">
                                                     @csrf
                                                     @method('DELETE')

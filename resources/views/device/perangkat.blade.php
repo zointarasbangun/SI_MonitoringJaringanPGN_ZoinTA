@@ -254,7 +254,8 @@
                         type: "get",
                         url: "{{ route('tespingajax') }}",
                         data: {
-                            ip: d.ip_perangkat
+                            ip: d.ip_perangkat,
+                            id:d.id
                         },
                         success: function(status) {
                             if (status == true) {

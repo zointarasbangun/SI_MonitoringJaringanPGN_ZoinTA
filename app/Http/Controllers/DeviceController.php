@@ -3,11 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Device;
+use App\Models\Notifikasi;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Services\TelegramService;
 
 class DeviceController extends Controller
 {
+    protected $telegram;
+
+    public function __construct(TelegramService $telegram)
+    {
+        $this->telegram = $telegram;
+    }
     public function dataDevice()
     {
         $data = Device::get();
@@ -138,9 +146,7 @@ class DeviceController extends Controller
         $user = User::where('role', 'klien')->get();
 
         foreach ($data as $perangkat) {
-            //tesping
-            // $hasil_test_ping = $this->tesPing($perangkat->ip_perangkat);
-            //masukkan hasil ke dalam array
+
             $perangkat->status = 'waiting';
         }
 
@@ -166,19 +172,33 @@ class DeviceController extends Controller
 
     public function tesPingAjax(Request $request)
     {
-
-
         exec("ping -n 1 " . $request->ip, $output, $result);
 
-        // print_r($output);
-
-        if ($result == 0)
-
+        if ($result == 0) {
             return true;
-        else
+        } else {
+            $device = Device::with('user')->find($request->id);
 
-            return false;
+            if ($device) {
+                $notifikasi = Notifikasi::create([
+                    'device_id' => $device->id,
+                    'message' => 'perangkat tidak terhubung'
+                ]);
+
+                // Kirim notifikasi ke Telegram
+                $namaPerangkat = $device->nama_perangkat;
+                $namaKlien = $device->user->name;
+                $pesan = 'perangkat tidak terhubung';
+
+                $message = "Nama Perangkat: {$namaPerangkat}\nNama Klien: {$namaKlien}\nPesan: {$pesan}";
+                $this->telegram->sendMessage($message);
+
+                return false;
+            } else {
+                return false;
+            }
+        }
+
     }
 
 }
-

@@ -116,9 +116,6 @@ class HomeController extends Controller
         return redirect()->route('dataAkun');
     }
 
-
-
-
     public function editAkun($id)
     {
         // Cek apakah user dengan ID yang diberikan ada dalam database

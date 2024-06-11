@@ -70,6 +70,51 @@ class ProfileController extends Controller
         return view('profile.profile', compact('user'));
     }
 
+    public function editprofileteknisi($id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('profile.editprofile', compact('user'));
+    }
+
+    public function updateprofileteknisi(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'name' => 'nullable',
+            'email' => 'nullable|email',
+            'password' => 'nullable|min:6',
+            'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($user->image) {
+                Storage::disk('public')->delete($user->image);
+            }
+
+            // Simpan gambar baru
+            $photoPath = $request->file('image')->store('photos', 'public');
+            $validatedData['image'] = $photoPath;
+
+
+
+
+        }
+        if (empty($request->password)) {
+            unset($validatedData['password']);
+        }
+        $user->update($validatedData);
+        // Jika ada perubahan pada password, hash dan simpan
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }
+
+        return redirect()->route('profileteknisi')->with('success', 'Data pengguna diperbarui.');
+    }
+
     public function profileklien()
     {
         $userId = auth()->id(); // Mendapatkan ID pengguna yang sedang login

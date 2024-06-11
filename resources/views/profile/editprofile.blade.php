@@ -205,7 +205,7 @@
                                                     @method('POST')
                                                 @else
                                                     <form
-                                                        action="{{ route('updateprofileklien', ['id' => Auth::user()->id]) }}"
+                                                        action="{{ route('updateprofileteknisi', ['id' => Auth::user()->id]) }}"
                                                         method="post" enctype="multipart/form-data">
                                                         @csrf
                                                         @method('POST')

@@ -28,7 +28,7 @@
                     <!-- Tambahkan kolom kosong untuk mempertahankan jarak -->
                 </div> --}}
 
-                @if (Auth::user()->role == 'admin')
+                {{-- @if (Auth::user()->role == 'admin')
                     <div class="col-lg-4 col-sm-12">
                         <div class="float-left">
 
@@ -118,7 +118,7 @@
                         </div>
                     </div>
                 @elseif (Auth::user()->role == 'teknisi')
-                @endif
+                @endif --}}
             </div>
         </div>
         <div class="container-fluid">
@@ -252,7 +252,8 @@
                         type: "get",
                         url: "{{ route('tespingajax') }}",
                         data: {
-                            ip: d.ip_perangkat
+                            ip: d.ip_perangkat,
+                            id: d.id,
                         },
                         success: function(status) {
                             if (status == true) {

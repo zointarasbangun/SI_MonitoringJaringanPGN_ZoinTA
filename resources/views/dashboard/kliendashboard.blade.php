@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-lg-12 connectedSortable"
                     style="margin-bottom : 20px; background-color: #1265A8; color: #fff;">
-                    <h3 style="margin-top: 30px; margin-left: 30px; font-weight: bold;">Klien</h3>
+                    <h3 style="margin-top: 30px; margin-left: 30px; font-weight: bold;">{{ $namaTeknisi = Auth::user()->name }}</h3>
                     <div class="container fluid ">
                         <div class="row d-flex justify-content-around">
                             <div class="col-lg-3 col-md-6">
@@ -212,7 +212,8 @@
                     type: "get",
                     url: "{{ route('tespingajax') }}",
                     data: {
-                        ip: d.ip_perangkat
+                        ip: d.ip_perangkat,
+                        id: d.id,
                     },
                     success: function(status) {
                         if (status == true) {

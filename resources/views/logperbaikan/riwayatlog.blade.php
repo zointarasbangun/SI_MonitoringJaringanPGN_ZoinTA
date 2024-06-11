@@ -37,7 +37,7 @@
                         <a href="{{ route('teknisi.downloadexcel', request()->all()) }}" class="btn btn-success ml-1" type="button">
                             <i class="iconify nav-icon" data-icon="mdi:file-excel"></i> Excel
                         </a>
-                        <a href=" " class="btn btn-danger ml-1" type="button">
+                        <a href="{{ route('teknisi.downloadpdf',request()->all()) }}" class="btn btn-danger ml-1" type="button">
                             <i class="iconify nav-icon" data-icon="ant-design:file-pdf-filled"></i> PDF
                         </a>
                     </div>

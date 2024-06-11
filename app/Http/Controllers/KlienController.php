@@ -32,8 +32,13 @@ class KlienController extends Controller
             'longitude' => 'required',
             'tahun_langganan' => 'nullable',
             'server_id' => 'nullable',
-            'role' => 'nullable'
+            'role' => 'nullable',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+        if ($request->hasFile('image')) {
+            $photoPath = $request->file('image')->store('photos', 'public');
+            $validatedData['image'] = $photoPath;
+        }
 
         // Buat array untuk data pengguna baru
         $userData = [
@@ -71,9 +76,12 @@ class KlienController extends Controller
             $userData['role'] = $validatedData['role'];
         }
 
+        if (isset($validatedData['image'])) {
+            $userData['image'] = $validatedData['image'];
+        }
+
         // Membuat pengguna baru
         $user = User::create($userData);
-
         // Redirect ke halaman dataAkun setelah penyimpanan berhasil
         return redirect()->route('dataKlien');
     }
@@ -160,7 +168,7 @@ class KlienController extends Controller
     public function detailklien($id)
     {
         $data = User::whereHas('server', function ($query) use ($id) {
-            $query->where('id', $id);   
+            $query->where('id', $id);
         })
             ->get();
 

@@ -143,7 +143,7 @@
         <nav class="container-fluid navbar navbar-expand navbar-white navbar-light">
             <ul class="ml-4 navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link hBack" data-widget="pushmenu"
+                    <a class="nav-link" data-widget="pushmenu"
                         href="{{ route('dashboard', ['id' => Auth::user()->id]) }}" role="button">
                         <i class="iconify nav-icon fs-4" data-icon="icon-park-outline:back"></i></a>
                 </li>
@@ -174,7 +174,7 @@
                     <div class="d-flex justify-content-end text-center py-1">
                         <div>
                             <!-- Mengganti route ke editProfile dengan menggunakan named route -->
-                            <a href="{{ route('editprofileklien', ['id' => Auth::user()->id]) }}"
+                            <a href="{{ route('editprofileteknisi', ['id' => Auth::user()->id]) }}"
                                 class="btn btn-outline-primary" role="button" style="z-index: 1;">Edit
                                 Profil</a>
                         </div>
@@ -186,7 +186,7 @@
         <nav class="container-fluid navbar navbar-expand navbar-white navbar-light">
             <ul class="ml-4 navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link hBack" data-widget="pushmenu"
+                    <a class="nav-link" data-widget="pushmenu"
                         href="{{ route('dashboardklien', ['id' => Auth::user()->id]) }}" role="button">
                         <i class="iconify nav-icon fs-4" data-icon="icon-park-outline:back"></i></a>
                 </li>

@@ -5,7 +5,7 @@
         <div class="container-fluid ">
             <div class="row p-5" style="margin-bottom : 20px; background-color: #1265A8; ">
 
-                @if (Auth::user()->role == 'admin')
+                {{-- @if (Auth::user()->role == 'admin')
                     <div class="col-lg-4 col-sm-12">
                         <div class="float-left">
 
@@ -185,7 +185,7 @@
                         </div>
                     </div>
                 @elseif (Auth::user()->role == 'teknisi')
-                @endif
+                @endif --}}
             </div>
         </div>
         <div class="container-fluid">

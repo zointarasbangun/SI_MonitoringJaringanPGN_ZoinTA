@@ -6,6 +6,7 @@ use App\Http\Controllers\KlienController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MonitoringController;
+use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServerController;
 use Illuminate\Support\Facades\Route;
@@ -73,6 +74,9 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('datalogperbaikan', [LogController::class, 'dataLog'])->name('datalog');
         Route::get('statuslogperbaikan', [LogController::class, 'statusLog'])->name('statuslog');
+        Route::get('editlogperbaikan/{id}', [LogController::class, 'editLog'])->name('editlog');
+        Route::post('updatelogperbaikan/{id}', [LogController::class, 'updateLog'])->name('updatelog');
+        Route::delete('deletelogperbaikan/{id}', [LogController::class, 'deleteLog'])->name('deletelog');
 
         Route::post('/approve-laporan/{id}', [LogController::class, 'approveLaporan'])->name('approveLaporan');
         Route::post('/reject-laporan/{id}', [LogController::class, 'rejectLaporan'])->name('rejectLaporan');
@@ -80,6 +84,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/profile', [ProfileController::class, 'profile'])->name('profileadmin');
         Route::get('/editprofile/{id}', [ProfileController::class, 'editprofile'])->name('editprofile');
         Route::post('/updateprofile/{id}', [ProfileController::class, 'updateprofile'])->name('updateprofile');
+
+        Route::get('/notifikasi', [NotifikasiController::class, 'notifikasi'])->name('notifikasi');
+
 
         Route::get('downloadexcel', [LogController::class, 'export_excel'])->name('downloadexcel');
         Route::get('downloadpdf', [LogController::class, 'export_pdf'])->name('downloadpdf');
@@ -115,8 +122,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('teknisi/get-servers-by-client', [LogController::class, 'getServersByClient'])->name('getServersByClient');
 
         Route::get('teknisi/profileteknisi', [ProfileController::class, 'profileteknisi'])->name('profileteknisi');
+        Route::get('teknisi/editprofileteknisi/{id}', [ProfileController::class, 'editprofileteknisi'])->name('editprofileteknisi');
+        Route::post('teknisi/updateprofileteknisi/{id}', [ProfileController::class, 'updateprofileteknisi'])->name('updateprofileteknisi');
 
+        Route::get('teknisi/downloadpdf', [LogController::class, 'teknisiexport_pdf'])->name('teknisi.downloadpdf');
         Route::get('teknisi/downloadexcel', [LogController::class, 'teknisiexport_excel'])->name('teknisi.downloadexcel');
+
+        Route::get('teknisi/notifikasi', [NotifikasiController::class, 'teknisinotifikasi'])->name('teknisi.notifikasi');
+
 
 
 
@@ -135,6 +148,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('klien/monitoringlokasi/{id}', [MonitoringController::class, 'kliendataMonitoring'])->name('klien.monitoringlokasi');
 
         Route::get('klien/datalogperbaikan/{id}', [LogController::class, 'kliendatalog'])->name('klien.datalog');
+
+        Route::get('klien/notifikasi', [NotifikasiController::class, 'kliennotifikasi'])->name('klien.notifikasi');
+
 
 
     });
