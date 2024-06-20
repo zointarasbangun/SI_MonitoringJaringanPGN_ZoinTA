@@ -208,6 +208,15 @@
                                             </div>
 
                                             <div class="mb-2">
+                                                <i class="mr-3 fa-regular fa-user"></i>
+                                                <label data-error="wrong" data-success="right"
+                                                    for="defaultForm-Username">Kontak</label>
+                                                <input type="text" name="kontak" id="defaultForm-kontak"
+                                                    class="form-control validate" placeholder="Input kontak"
+                                                    style="color:black;">
+                                            </div>
+
+                                            <div class="mb-2">
                                                 <i class="iconify nav-icon mr-3" data-icon="ic:outline-email"></i>
                                                 <label data-error="wrong" data-success="right"
                                                     for="defaultForm-email">Email</label>
@@ -319,8 +328,8 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <p>Apakah Anda yakin ingin menghapus data user
-                                                    <b>{{ $d->nama }}</b>
+                                                <p>Apakah Anda yakin ingin menghapus data user <b>{{ $d->name }}</b>
+
                                                 </p>
                                             </div>
                                             <div class="modal-footer justify-content-between">

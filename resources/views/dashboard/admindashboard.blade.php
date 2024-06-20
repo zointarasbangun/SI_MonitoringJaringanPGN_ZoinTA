@@ -22,7 +22,8 @@
             <div class="row">
                 <div class="col-lg-12 connectedSortable"
                     style="margin-bottom : 20px; background-color: #1265A8; color: #fff;">
-                    <h3 style="margin-top: 30px; margin-left: 30px; font-weight: bold;">{{ $namaTeknisi = Auth::user()->name }}</h3>
+                    <h3 style="margin-top: 30px; margin-left: 30px; font-weight: bold;">
+                        {{ $namaTeknisi = Auth::user()->name }}</h3>
                     <div class="container fluid">
                         <div class="row d-flex justify-content-around">
                             <div class="col-lg-3 col-md-6">
@@ -60,7 +61,7 @@
                                             style="font-size: 36px; color: #1265A8;"></i>
                                     </div>
                                     <p style="font-size: 36px;color: #1265A8;">
-                                    {{ $teknisi->count() }}</p>
+                                        {{ $teknisi->count() }}</p>
                                 </div>
                             </div>
 
@@ -86,8 +87,11 @@
             {{-- <div class="col-12">
                     <a href="{{ route('create') }}" class="btn btn-primary mb-3">Tambah Data Produk</a> --}}
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h1 class="card-title"><b>List Klien</b></h1>
+                    <a href="{{ route('klienlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </a>
                 </div>
                 <!-- /.card-header -->
                 @if (session('success'))
@@ -143,8 +147,8 @@
                                                 class= "fas fa-pen"></i></a>
                                         <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
                                             class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
-                                        <a href="{{ route('klienlokasi', ['id' => $d->id]) }}" class="btn btn-success"><i
-                                                class= "fa-solid fa-map-location-dot"></i></a>
+                                        {{-- <a href="{{ route('klienlokasi', ['id' => $d->id]) }}" class="btn btn-success"><i
+                                                class= "fa-solid fa-map-location-dot"></i></a> --}}
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="modal-hapus{{ $d->id }}">

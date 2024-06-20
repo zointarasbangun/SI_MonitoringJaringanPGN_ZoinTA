@@ -34,10 +34,12 @@
                             <a href="{{ route('teknisi.riwayatlog') }}" class="btn btn-danger ml-1"><i class="iconify"
                                     data-icon="solar:refresh-linear"></i></a>
                         </div>
-                        <a href="{{ route('teknisi.downloadexcel', request()->all()) }}" class="btn btn-success ml-1" type="button">
+                        <a href="{{ route('teknisi.downloadexcel', request()->all()) }}" class="btn btn-success ml-1"
+                            type="button">
                             <i class="iconify nav-icon" data-icon="mdi:file-excel"></i> Excel
                         </a>
-                        <a href="{{ route('teknisi.downloadpdf',request()->all()) }}" class="btn btn-danger ml-1" type="button">
+                        <a href="{{ route('teknisi.downloadpdf', request()->all()) }}" class="btn btn-danger ml-1"
+                            type="button">
                             <i class="iconify nav-icon" data-icon="ant-design:file-pdf-filled"></i> PDF
                         </a>
                     </div>
@@ -76,13 +78,14 @@
                                 <th scope="col">Foto</th>
                                 <th scope="col">Status Log</th>
                                 <th scope="col">Status Admin</th>
+                                <th scope="col">Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($log as $index => $d)
                                 <tr>
                                     <td>{{ intval($index) + 1 }}</td>
-                                    <td>{{ $d->teknisi }}</td>
+                                    <td>{{ $d->teknisilog->name }}</td>
                                     <td>{{ $d->serverlog->nama_server }}</td>
                                     <td> {{ $d->userlog->name }}</td>
                                     <td>{{ $d->devicelog->nama_perangkat }}</td>
@@ -147,7 +150,7 @@
                                                         <div class="modal-body mx-3">
                                                             <div class="mb-0">
                                                                 <img src="{{ asset('storage/' . $d->foto) }}"
-                                                                    class="img-fluid" alt="Foto Kendaraan"
+                                                                    class="img-fluid" alt="Foto Logperbaikan"
                                                                     style="max-width: 100%; height: auto;" />
                                                                 <!-- Atur lebar gambar agar sesuai dengan lebar modal -->
                                                             </div>
@@ -197,6 +200,9 @@
                                             </span>
                                         @endif
                                     </td>
+                                    <td><span class="badge badge-info">{{ $d->keteranganadmin }}</span></td>
+
+
                                 </tr>
                                 <div class="modal fade" id="modal-hapus{{ $d->id }}">
                                     <div class="modal-dialog">

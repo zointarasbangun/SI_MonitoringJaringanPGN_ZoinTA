@@ -22,7 +22,8 @@
             <div class="row">
                 <div class="col-lg-12 connectedSortable"
                     style="margin-bottom : 20px; background-color: #1265A8; color: #fff;">
-                    <h3 style="margin-top: 10px; margin-left: 30px; font-weight: bold;">{{ $namaTeknisi = Auth::user()->name }}</h3>
+                    <h3 style="margin-top: 10px; margin-left: 30px; font-weight: bold;">
+                        {{ $namaTeknisi = Auth::user()->name }}</h3>
                     <div class="container fluid ">
                         <div class="row d-flex justify-content-around">
                             <div class="col-lg-3 col-md-6">
@@ -86,95 +87,98 @@
             {{-- <div class="col-12">
                     <a href="{{ route('create') }}" class="btn btn-primary mb-3">Tambah Data Produk</a> --}}
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h1 class="card-title"><b>List Klien</b></h1>
+                    <a href="{{ route('teknisi.klienlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </a>
                 </div>
+
                 <!-- /.card-header -->
-                    <div class="table-responsive" style="overflow-x:auto;">
-                        <table class="table table-striped text-center" id="tableakun">
-                            <thead>
+                <div class="table-responsive" style="overflow-x:auto;">
+                    <table class="table table-striped text-center" id="tableakun">
+                        <thead>
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">Logo</th>
+                                <th scope="col">Nama Klien</th>
+                                <th scope="col">Kontak</th>
+                                <th scope="col">Alamat</th>
+                                <th scope="col">Server</th>
+                                <th scope="col">Perangkat</th>
+                                {{-- <th scope="col">Aksi</th> --}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($data as $d)
                                 <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">Logo</th>
-                                    <th scope="col">Nama Klien</th>
-                                    <th scope="col">Kontak</th>
-                                    <th scope="col">Alamat</th>
-                                    <th scope="col">Server</th>
-                                    <th scope="col">Perangkat</th>
-                                    <th scope="col">Aksi</th>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        @if ($d->image)
+                                            <img src="{{ asset('storage/' . $d->image) }}" class="img-fluid" alt="image"
+                                                width="30" />
+                                        @else
+                                            <span>No Image</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $d->name }}</td>
+                                    <td>{{ $d->kontak }}</td>
+                                    <td>{{ $d->alamat }}</td>
+                                    <td>{{ $d->server?->nama_server }}</td>
+                                    <td>
+                                        <a href="{{ route('teknisi.detailDevice', ['id' => $d->id]) }}"
+                                            class="btn btn-info">{{ $d->device->count() }} <i
+                                                class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
+                                        </a>
+                                    </td>
+                                    {{-- <td>
+                                        <a href="{{ route('teknisi.klienlokasi', ['id' => $d->id]) }}"
+                                            class="btn btn-success">Lihat lokasi <i
+                                                class= "fa-solid fa-map-location-dot"></i></a>
+                                    </td> --}}
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($data as $d)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>
-                                            @if ($d->image)
-                                                <img src="{{ asset('storage/' . $d->image) }}" class="img-fluid"
-                                                    alt="image" width="30" />
-                                            @else
-                                                <span>No Image</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $d->name }}</td>
-                                        <td>{{ $d->kontak }}</td>
-                                        <td>{{ $d->alamat }}</td>
-                                        <td>{{ $d->server?->nama_server }}</td>
-                                        <td>
-                                            <a href="{{ route('teknisi.detailDevice', ['id' => $d->id]) }}"
-                                                class="btn btn-info">{{ $d->device->count() }} <i
-                                                    class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('teknisi.klienlokasi', ['id' => $d->id]) }}"
-                                                class="btn btn-success">Lihat lokasi <i
-                                                    class= "fa-solid fa-map-location-dot"></i></a>
-                                        </td>
-                                    </tr>
-                                    <div class="modal fade" id="modal-hapus{{ $d->id }}">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Default Modal</h4>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Apakah Anda yakin ingin menghapus data user
-                                                        <b>{{ $d->nama }}</b>
-                                                    </p>
-                                                </div>
-                                                <div class="modal-footer justify-content-between">
-                                                    <form action="{{ route('deleteAkun', ['id' => $d->id]) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button" class="btn btn-default"
-                                                            data-dismiss="modal">Batal</button>
-                                                        <button type="submit" class="btn btn-primary">Ya,
-                                                            Hapus</button>
-
-                                                    </form>
-
-                                                </div>
+                                <div class="modal fade" id="modal-hapus{{ $d->id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Default Modal</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
-                                            <!-- /.modal-content -->
+                                            <div class="modal-body">
+                                                <p>Apakah Anda yakin ingin menghapus data user
+                                                    <b>{{ $d->nama }}</b>
+                                                </p>
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <form action="{{ route('deleteAkun', ['id' => $d->id]) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-primary">Ya,
+                                                        Hapus</button>
+
+                                                </form>
+
+                                            </div>
                                         </div>
-                                        <!-- /.modal-dialog -->
+                                        <!-- /.modal-content -->
                                     </div>
-                                    <!-- /.modal -->
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                <!-- /.modal -->
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
+                <!-- /.card-body -->
             </div>
-            <!-- /.card -->
         </div>
+        <!-- /.card -->
+    </div>
     </div>
     </div><!-- /.container-fluid -->
 @endsection

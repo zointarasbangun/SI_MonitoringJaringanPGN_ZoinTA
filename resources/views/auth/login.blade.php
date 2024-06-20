@@ -4,7 +4,7 @@
 
 <body>
 
-    <body class="hold-transition login-page" style="background-image: url('{{ asset('img/Carousel-1.png') }}'); background-size: cover;">
+    <body class="hold-transition login-page" style="background-image: url('{{ asset('img/bgpgn2.png') }}'); background-size: cover;">
         <div class="container-fluid">
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-4">

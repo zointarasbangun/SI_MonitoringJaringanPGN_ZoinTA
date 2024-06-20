@@ -67,4 +67,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(logperbaikan::class, 'user_id','id');
     }
+
+    function teknisi()
+    {
+        return $this->hasMany(logperbaikan::class, 'teknisi_id','id');
+    }
 }

@@ -22,7 +22,8 @@
             <div class="row">
                 <div class="col-lg-12 connectedSortable"
                     style="margin-bottom : 20px; background-color: #1265A8; color: #fff;">
-                    <h3 style="margin-top: 30px; margin-left: 30px; font-weight: bold;">{{ $namaTeknisi = Auth::user()->name }}</h3>
+                    <h3 style="margin-top: 30px; margin-left: 30px; font-weight: bold;">
+                        {{ $namaTeknisi = Auth::user()->name }}</h3>
                     <div class="container fluid ">
                         <div class="row d-flex justify-content-around">
                             <div class="col-lg-3 col-md-6">
@@ -86,8 +87,11 @@
         </div>
         <div class="container-fluid">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h1 class="card-title"><b>List Perangkat</b></h1>
+                    <a href="{{ route('monitoringlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </a>
                 </div>
                 <!-- table -->
                 <div class="container-fluid ">
@@ -109,7 +113,7 @@
                                 <th scope="col">Nama Perangkat</th>
                                 <th scope="col">Alamat IP</th>
                                 <th scope="col">status</th>
-                                <th scope="col">Aksi</th>
+                                {{-- <th scope="col">Aksi</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -133,7 +137,7 @@
                                             </span>
                                         @endif
                                     </td>
-                                    @if (Auth::user()->role == 'admin')
+                                    {{-- @if (Auth::user()->role == 'admin')
                                         <td>
                                             <a href="{{ route('editDevice', ['id' => $d->id]) }}"
                                                 class="btn btn-primary"><i class= "fas fa-pen"></i></a>
@@ -147,8 +151,7 @@
                                             <a href="{{ route('teknisi.monitoringlokasi', ['id' => $d->id]) }}"
                                                 class="btn btn-success">Lihat lokasi <i
                                                     class= "fa-solid fa-map-location-dot"></i></a>
-                                            {{-- <a href="#" class="btn btn-primary">
-                                        <i class="fa-solid fa-map-location-dot"></i></a> --}}
+
                                         </td>
                                     @else
                                         <td>
@@ -156,7 +159,7 @@
                                                 class="btn btn-success">Lihat lokasi <i
                                                     class= "fa-solid fa-map-location-dot"></i></a>
                                         </td>
-                                    @endif
+                                    @endif --}}
                                 </tr>
                                 <div class="modal fade" id="modal-hapus{{ $d->id }}">
                                     <div class="modal-dialog">
@@ -231,7 +234,7 @@
 
         $(document).ready(function() {
             tesPing()
-            setInterval(tesPing, 30000);
+            setInterval(tesPing, 300000);
             // $("[id='status-25']").html("<span class='badge bg-success'>Terhubung</span>")
         })
     </script>

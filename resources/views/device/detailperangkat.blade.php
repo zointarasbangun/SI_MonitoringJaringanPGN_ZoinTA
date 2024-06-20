@@ -271,7 +271,7 @@
 
             $(document).ready(function() {
                 tesPing()
-                setInterval(tesPing, 30000);
+                setInterval(tesPing, 300000);
                 // $("[id='status-25']").html("<span class='badge bg-success'>Terhubung</span>")
             })
         </script>

@@ -17,8 +17,8 @@
                                     <a href="{{ route('dataKlien') }}" class="btn btn-danger ml-1"><i class="iconify"
                                             data-icon="solar:refresh-linear"></i> Reset</a>
                                 @elseif (Auth::user()->role == 'teknisi')
-                                    <a href="{{ route('teknisi.dataKlien') }}" class="btn btn-danger ml-1"><i class="iconify"
-                                            data-icon="solar:refresh-linear"></i> Reset</a>
+                                    <a href="{{ route('teknisi.dataKlien') }}" class="btn btn-danger ml-1"><i
+                                            class="iconify" data-icon="solar:refresh-linear"></i> Reset</a>
                                 @endif
                             </div>
                         </div>
@@ -50,7 +50,8 @@
                                             </button>
 
                                         </div>
-                                        <form class="" method="POST" action="{{ route('tambahKlien') }}" enctype="multipart/form-data">
+                                        <form class="" method="POST" action="{{ route('tambahKlien') }}"
+                                            enctype="multipart/form-data">
                                             @csrf
                                             <div class="modal-body mx-3">
                                                 <div class="mb-2">
@@ -231,8 +232,17 @@
             {{-- <div class="col-12">
                     <a href="{{ route('create') }}" class="btn btn-primary mb-3">Tambah Data Produk</a> --}}
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h1 class="card-title"><b>List Klien</b></h1>
+                    @if (Auth::user()->role == 'admin')
+                        <a href="{{ route('klienlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi klien
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </a>
+                    @else
+                        <a href="{{ route('teknisi.klienlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi klien
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </a>
+                    @endif
                 </div>
                 <!-- /.card-header -->
                 @if (session('success'))
@@ -257,7 +267,9 @@
                                 <th scope="col">Alamat</th>
                                 <th scope="col">Server</th>
                                 <th scope="col">Perangkat</th>
+                                @if (Auth::user()->role == 'admin')
                                 <th scope="col">Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                     <tbody>
@@ -289,8 +301,8 @@
                                                 class= "fas fa-pen"></i></a>
                                         <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
                                             class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
-                                        <a href="{{ route('klienlokasi', ['id' => $d->id]) }}" class="btn btn-success"><i
-                                                class= "fa-solid fa-map-location-dot"></i></a>
+                                        {{-- <a href="{{ route('klienlokasi', ['id' => $d->id]) }}" class="btn btn-success"><i
+                                                class= "fa-solid fa-map-location-dot"></i></a> --}}
                                     </td>
                                 @elseif(Auth::user()->role == 'teknisi')
                                     <td>
@@ -299,11 +311,11 @@
                                                 class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
                                         </a>
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         <a href="{{ route('teknisi.klienlokasi', ['id' => $d->id]) }}"
                                             class="btn btn-success">Lihat lokasi <i
                                                 class= "fa-solid fa-map-location-dot"></i></a>
-                                    </td>
+                                    </td> --}}
                                 @endif
                             </tr>
                             <div class="modal fade" id="modal-hapus{{ $d->id }}">
@@ -318,7 +330,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <p>Apakah Anda yakin ingin menghapus data user
-                                                <b>{{ $d->nama }}</b>
+                                                <b>{{ $d->name }}</b>
                                             </p>
                                         </div>
                                         <div class="modal-footer justify-content-between">

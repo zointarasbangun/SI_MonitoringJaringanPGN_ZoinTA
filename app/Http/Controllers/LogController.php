@@ -52,6 +52,7 @@ class LogController extends Controller
         if ($laporan) {
             // Ubah status laporan menjadi disetujui
             $laporan->statusadmin = 'disetujui';
+            $laporan->keteranganadmin = 'Laporan valid';
             $laporan->save();
 
             // Kirim respons JSON dengan pesan sukses
@@ -71,6 +72,7 @@ class LogController extends Controller
         if ($laporan) {
             // Ubah status laporan menjadi ditolak
             $laporan->statusadmin = 'ditolak';
+            $laporan->keteranganadmin = 'Laporan tidak valid';
             $laporan->save();
 
             // Kirim respons JSON dengan pesan sukses
@@ -109,7 +111,7 @@ class LogController extends Controller
                     $query->where('statusadmin', 'menunggu')
                         ->whereNotNull('foto');
                 });
-        })->where('teknisi', $namaTeknisi)
+        })->where('teknisi_id', auth()->id())
             ->get();
 
 
@@ -119,37 +121,38 @@ class LogController extends Controller
     public function teknisiaddlog(Request $request)
     {
         $validatedData = $request->validate([
-            'teknisi' => 'required',
-            'user_id' => 'nullable',
-            'server_id' => 'nullable',
-            'device_id' => 'nullable',
+            'teknisi' => 'required', // Sesuaikan dengan kebutuhan Anda
+            'teknisi_id' => 'nullable', // Sesuaikan dengan kebutuhan Anda
+            'user_id' => 'nullable', // Sesuaikan dengan kebutuhan Anda
+            'server_id' => 'nullable', // Sesuaikan dengan kebutuhan Anda
+            'device_id' => 'nullable', // Sesuaikan dengan kebutuhan Anda
             'tanggal' => 'required|date',
-            'judul' => 'nullable',
-            'keterangan' => 'nullable',
+            'judul' => 'nullable', // Sesuaikan dengan kebutuhan Anda
+            'keterangan' => 'nullable', // Sesuaikan dengan kebutuhan Anda
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
-        // Membuat instance LogPerbaikan baru dengan data yang divalidasi
-        $logPerbaikan = new LogPerbaikan();
-        $logPerbaikan->teknisi = $validatedData['teknisi'];
-        $logPerbaikan->user_id = $validatedData['user_id'];
-        $logPerbaikan->server_id = $validatedData['server_id'];
-        $logPerbaikan->device_id = $validatedData['device_id'];
-        $logPerbaikan->tanggal = $validatedData['tanggal'];
-        $logPerbaikan->judul = $validatedData['judul'];
-        $logPerbaikan->keterangan = $validatedData['keterangan'];
-
-        // Jika terdapat file foto yang diunggah, simpan path-nya ke dalam kolom 'foto'
         if ($request->hasFile('foto')) {
             $photoPath = $request->file('foto')->store('photos', 'public');
-            $logPerbaikan->foto = $photoPath;
+            $validatedData['foto'] = $photoPath;
         }
+        // Membuat instance LogPerbaikan baru dengan data yang divalidasi
+        $logPerbaikan = new LogPerbaikan();
+        $logPerbaikan->teknisi = $validatedData['teknisi']; // Pastikan field ini sesuai dengan yang ada di model
+        $logPerbaikan->teknisi_id = Auth::user()->id; // Ambil ID dari user yang sedang login
+        $logPerbaikan->user_id = $validatedData['user_id']; // Sesuaikan dengan field di model LogPerbaikan
+        $logPerbaikan->server_id = $validatedData['server_id']; // Sesuaikan dengan field di model LogPerbaikan
+        $logPerbaikan->device_id = $validatedData['device_id']; // Sesuaikan dengan field di model LogPerbaikan
+        $logPerbaikan->tanggal = $validatedData['tanggal']; // Sesuaikan dengan field di model LogPerbaikan
+        $logPerbaikan->judul = $validatedData['judul']; // Sesuaikan dengan field di model LogPerbaikan
+        $logPerbaikan->keterangan = $validatedData['keterangan']; // Sesuaikan dengan field di model LogPerbaikan
+        $logPerbaikan->foto = $validatedData['foto']; // Sesuaikan dengan field di model LogPerbaikan
 
         // Simpan log perbaikan
         $logPerbaikan->save();
 
-        return redirect()->route('teknisi.statuslog');
+        return redirect()->route('teknisi.statuslog'); // Sesuaikan dengan route yang Anda miliki
     }
+
     public function editlog($id)
     {
         $log = logperbaikan::findOrFail($id);
@@ -246,13 +249,12 @@ class LogController extends Controller
 
     public function teknisiriwayatlog()
     {
-        $namaTeknisi = Auth::user()->name;
         $user = User::whereNot('role', 'admin')->whereNot('role', 'teknisi')->get();
         $server = Server::all();
         $device = Device::all();
-        $log = logperbaikan::whereNot('statusadmin', 'menunggu')->where('teknisi', $namaTeknisi)->get();
+        $log = logperbaikan::whereNot('statusadmin', 'menunggu')->where('teknisi_id', auth()->id())->get();
 
-        return view('logperbaikan.riwayatlog', compact('log', 'user', 'server', 'device', 'namaTeknisi'));
+        return view('logperbaikan.riwayatlog', compact('log', 'user', 'server', 'device'));
     }
 
     public function getDevicesByClient(Request $request)
@@ -272,14 +274,16 @@ class LogController extends Controller
         // Ambil ID klien dari permintaan
         $klienId = $request->input('user_id');
 
-        // Modifikasi query untuk mengambil daftar perangkat yang sesuai dengan klien yang dipilih
-        $servers = Server::whereHas('user', function ($query) use ($klienId) {
+        // Query untuk mengambil daftar server yang sesuai dengan klien yang dipilih
+        $servers = Server::whereHas('users', function ($query) use ($klienId) {
             $query->where('id', $klienId);
         })->pluck('nama_server', 'id');
 
-        // Mengembalikan daftar perangkat sebagai respons JSON
+        // Mengembalikan daftar server sebagai respons JSON
         return response()->json($servers);
     }
+
+
 
     public function kliendatalog($id)
     {

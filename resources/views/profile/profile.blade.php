@@ -288,7 +288,19 @@
                                     </p>
                                 </div>
                             </div>
-                        @else
+                        @elseif(Auth::user()->role == 'teknisi')
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">
+                                        No Hp
+                                    </p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        {{ $user->kontak }}
+                                    </p>
+                                </div>
+                            </div>
                         @endif
                         <hr>
                     </div>

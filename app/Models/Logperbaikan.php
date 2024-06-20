@@ -30,6 +30,11 @@ class logperbaikan extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    function teknisilog()
+    {
+        return $this->belongsTo(User::class, 'teknisi_id', 'id');
+    }
+
     function serverlog()
     {
         return $this->belongsTo(Server::class, 'server_id', 'id');

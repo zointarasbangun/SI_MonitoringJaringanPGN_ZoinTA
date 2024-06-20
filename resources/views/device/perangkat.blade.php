@@ -17,8 +17,8 @@
                                     <a href="{{ route('dataDevice') }}" class="btn btn-danger ml-1"><i class="iconify"
                                             data-icon="solar:refresh-linear"></i> Reset</a>
                                 @else
-                                    <a href="{{ route('teknisi.dataDevice') }}" class="btn btn-danger ml-1"><i class="iconify"
-                                            data-icon="solar:refresh-linear"></i> Reset</a>
+                                    <a href="{{ route('teknisi.dataDevice') }}" class="btn btn-danger ml-1"><i
+                                            class="iconify" data-icon="solar:refresh-linear"></i> Reset</a>
                                 @endif
                             </div>
                         </div>
@@ -124,8 +124,23 @@
         </div>
         <div class="container-fluid">
             <div class="card">
-                <div class="card-header">
-                    <h1 class="card-title"><b>List Perangkat</b></h1>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h1 class="card-title"><b>List Klien</b></h1>
+                    @if (Auth::user()->role == 'admin')
+                        <a href="{{ route('monitoringlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi perangkat
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </a>
+                    @elseif(Auth::user()->role == 'teknisi')
+                        <a href="{{ route('teknisi.monitoringlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi
+                            perangkat
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </a>
+                    @else
+                        <a href="{{ route('klien.monitoringlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi
+                            perangkat
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </a>
+                    @endif
                 </div>
                 <!-- table -->
                 <div class="container-fluid ">
@@ -147,7 +162,9 @@
                                 <th scope="col">Nama Perangkat</th>
                                 <th scope="col">Alamat IP</th>
                                 <th scope="col">status</th>
-                                <th scope="col">Aksi</th>
+                                @if (Auth::user()->role == 'admin')
+                                    <th scope="col">Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -172,31 +189,26 @@
                                         @endif
                                     </td>
                                     @if (Auth::user()->role == 'admin')
-                                    <td>
-                                        <a href="{{ route('editDevice', ['id' => $d->id]) }}" class="btn btn-primary"><i
-                                            class= "fas fa-pen"></i></a>
-                                    <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
-                                        class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
-                                        <a href="{{ route('monitoringlokasi', ['id' => $d->id]) }}"
-                                            class="btn btn-success"> <i
-                                                class= "fa-solid fa-map-location-dot"></i></a>
-                                    </td>
-                                    @elseif (Auth::user()->role == 'teknisi')
                                         <td>
+                                            <a href="{{ route('editDevice', ['id' => $d->id]) }}"
+                                                class="btn btn-primary"><i class= "fas fa-pen"></i></a>
+                                            <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
+                                                class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
+                                            {{-- <a href="{{ route('monitoringlokasi', ['id' => $d->id]) }}"
+                                                class="btn btn-success"> <i class= "fa-solid fa-map-location-dot"></i></a> --}}
+                                        </td>
+                                    @elseif (Auth::user()->role == 'teknisi')
+                                        {{-- <td>
                                             <a href="{{ route('teknisi.monitoringlokasi', ['id' => $d->id]) }}"
                                                 class="btn btn-success">Lihat lokasi <i
                                                     class= "fa-solid fa-map-location-dot"></i></a>
-                                            {{-- <a href="#" class="btn btn-primary">
-                                        <i class="fa-solid fa-map-location-dot"></i></a> --}}
-                                        </td>
-                                        @elseif (Auth::user()->role == 'klien')
-                                        <td>
+                                        </td> --}}
+                                    @elseif (Auth::user()->role == 'klien')
+                                        {{-- <td>
                                             <a href="{{ route('klien.monitoringlokasi', ['id' => auth()->user()->id]) }}"
                                                 class="btn btn-success">Lihat lokasi <i
                                                     class= "fa-solid fa-map-location-dot"></i></a>
-                                            {{-- <a href="#" class="btn btn-primary">
-                                        <i class="fa-solid fa-map-location-dot"></i></a> --}}
-                                        </td>
+                                        </td> --}}
                                     @endif
                                 </tr>
                                 <div class="modal fade" id="modal-hapus{{ $d->id }}">
@@ -255,7 +267,7 @@
                         url: "{{ route('tespingajax') }}",
                         data: {
                             ip: d.ip_perangkat,
-                            id:d.id
+                            id: d.id
                         },
                         success: function(status) {
                             if (status == true) {
@@ -271,10 +283,9 @@
                 });
             }
 
-            $(document).ready(function() {
-                tesPing()
-                setInterval(tesPing, 20000);
-                // $("[id='status-25']").html("<span class='badge bg-success'>Terhubung</span>")
-            })
+            //  $(document).ready(function() {
+            //      tesPing()
+            //      setInterval(tesPing, 300000);
+            //  })
         </script>
     @endsection

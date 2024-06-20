@@ -269,7 +269,7 @@
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group">
-                                                                        <label>Nama Klien</label>
+                                                                        <label>Nama</label>
                                                                         <input class="form-control" type="text"
                                                                             name="name"
                                                                             value=" {{ $user->name }}">
@@ -277,7 +277,7 @@
                                                                 </div>
                                                                 <div class="col">
                                                                     <div class="form-group">
-                                                                        <label>Email Klien</label>
+                                                                        <label>Email </label>
                                                                         <input class="form-control" type="text"
                                                                             name="email"
                                                                             value="{{ $user->email }}">
@@ -312,6 +312,18 @@
                                                                             <input class="form-control" type="text"
                                                                                 name="alamat"
                                                                                 value="{{ $user->alamat }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @elseif (Auth::user()->role == 'teknisi')
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <div class="form-group">
+                                                                            <label>Kontak</label>
+                                                                            <input class="form-control" type="number"
+                                                                                name="kontak"
+                                                                                value="{{ $user->kontak }}"
+                                                                                placeholder="kontak">
                                                                         </div>
                                                                     </div>
                                                                 </div>

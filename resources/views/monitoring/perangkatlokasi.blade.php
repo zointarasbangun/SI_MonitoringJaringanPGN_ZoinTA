@@ -203,7 +203,7 @@
 
         $(document).ready(function() {
             tesPing()
-            setInterval(tesPing, 20000);
+            setInterval(tesPing, 300000);
         })
     </script>
     <script>

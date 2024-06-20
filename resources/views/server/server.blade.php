@@ -17,8 +17,8 @@
                                     <a href="{{ route('dataServer') }}" class="btn btn-danger ml-1"><i class="iconify"
                                             data-icon="solar:refresh-linear"></i> Reset</a>
                                 @elseif (Auth::user()->role == 'teknisi')
-                                    <a href="{{ route('teknisi.dataServer') }}" class="btn btn-danger ml-1"><i class="iconify"
-                                            data-icon="solar:refresh-linear"></i> Reset</a>
+                                    <a href="{{ route('teknisi.dataServer') }}" class="btn btn-danger ml-1"><i
+                                            class="iconify" data-icon="solar:refresh-linear"></i> Reset</a>
                                 @endif
                             </div>
                         </div>
@@ -99,8 +99,17 @@
         </div>
         <div class="container-fluid">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h1 class="card-title"><b>List Server</b></h1>
+                    @if(Auth::user()->role == 'admin')
+                    <a href="{{ route('serverlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi server
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </a>
+                    @else
+                    <a href="{{ route('teknisi.serverlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi server
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </a>
+                    @endif
                 </div>
                 <!-- table -->
                 @if (session('success'))
@@ -120,7 +129,9 @@
                             <th scope="col">No</th>
                             <th scope="col">Nama server</th>
                             <th scope="col">Jumlah Klien</th>
+                            @if(Auth::user()->role == 'admin')
                             <th scope="col">Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -141,8 +152,8 @@
                                                 class= "fas fa-pen"></i></a>
                                         <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
                                             class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
-                                        <a href="{{ route('serverlokasi', ['id' => $d->id]) }}" class="btn btn-success"><i
-                                                class= "fa-solid fa-map-location-dot"></i></a>
+                                        {{-- <a href="{{ route('serverlokasi', ['id' => $d->id]) }}"
+                                            class="btn btn-success"><i class= "fa-solid fa-map-location-dot"></i></a> --}}
                                         {{-- <a href="#" class="btn btn-primary">
                                         <i class="fa-solid fa-map-location-dot"></i></a> --}}
                                     </td>
@@ -153,11 +164,11 @@
                                                 class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
                                         </a>
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         <a href="{{ route('teknisi.serverlokasi', ['id' => $d->id]) }}"
                                             class="btn btn-success">Lihat lokasi <i
                                                 class= "fa-solid fa-map-location-dot"></i></a>
-                                    </td>
+                                    </td> --}}
                                 @endif
 
                             </tr>
@@ -172,7 +183,7 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Apakah Anda yakin ingin menghapus data user
+                                            <p>Apakah Anda yakin ingin menghapus 
                                                 <b>{{ $d->nama_server }}</b>
                                             </p>
                                         </div>

@@ -13,9 +13,11 @@ return new class extends Migration {
         Schema::create('logperbaikan', function (Blueprint $table) {
             $table->id();
             $table->string('teknisi')->unique();
+            $table->unsignedBigInteger('teknisi_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('server_id')->nullable();
             $table->unsignedBigInteger('device_id')->nullable();
+            $table->foreign('teknisi_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('server_id')->references('id')->on('servers')->onDelete('set null');
             $table->foreign('device_id')->references('id')->on('devices')->onDelete('set null');

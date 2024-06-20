@@ -68,10 +68,10 @@
                                                 <div class="mb-2">
                                                     <i class="mr-3 fa-regular fa-user"></i>
                                                     <label data-error="wrong" data-success="right"
-                                                        for="defaultForm-Username">Nama Teknisi</label>
+                                                        for="teknisi">Nama Teknisi</label>
                                                     <input type="text" name="teknisi" id="defaultForm-username"
                                                         class="form-control validate" placeholder="Input nama"
-                                                        value="{{ $namaTeknisi }}" style="color:black;" readonly>
+                                                        value="{{ Auth::user()->name }}" style="color:black;" readonly>
                                                 </div>
 
                                                 <div class="mb-2">
@@ -90,7 +90,7 @@
 
                                                 <div class="mb-2">
                                                     <i class="iconify nav-icon" data-icon="uil:server"></i>
-                                                    <label for="server" class="ml-3">Server</label>
+                                                    <label for="server_id" class="ml-3">Server</label>
                                                     <select class="custom-select form-control validate" id="server_id"
                                                         name="server_id" aria-label="Default select example"
                                                         style="color:black;">
@@ -140,9 +140,11 @@
 
                                                 <!-- Tambahkan kolom foto -->
                                                 <div class="mb-2">
-                                                    <label for="foto">Foto</label>
-                                                    <input type="file" class="form-control-file" id="foto"
-                                                        name="foto">
+                                                    <i class="mr-3 fa-regular fa-user"></i>
+                                                    <label data-error="wrong" data-success="right"
+                                                        for="defaultForm-Username">Foto</label>
+                                                    <input type="file" name="foto" id="foto"
+                                                        class="form-control validate" style="color:black;">
                                                 </div>
                                             </div>
                                             <div class="modal-footer d-flex justify-content-center">
@@ -196,7 +198,7 @@
                             @foreach ($log as $index => $d)
                                 <tr>
                                     <td>{{ intval($index) + 1 }}</td>
-                                    <td>{{ $d->teknisi }}</td>
+                                    <td>{{ $d->teknisilog->name }}</td>
                                     <td>{{ $d->serverlog->nama_server }}</td>
                                     <td> {{ $d->userlog->name }}</td>
                                     <td>{{ $d->devicelog->nama_perangkat }}</td>
@@ -261,7 +263,7 @@
                                                         <div class="modal-body mx-3">
                                                             <div class="mb-0">
                                                                 <img src="{{ asset('storage/' . $d->foto) }}"
-                                                                    class="img-fluid" alt="Foto Kendaraan"
+                                                                    class="img-fluid" alt="Foto Log perbaikan"
                                                                     style="max-width: 100%; height: auto;" />
                                                                 <!-- Atur lebar gambar agar sesuai dengan lebar modal -->
                                                             </div>
@@ -490,7 +492,7 @@
                 },
                 error: function(error) {
                     console.log(error);
-                    alert("Terjadi kesalahan saat menolak lapaoran.");
+                    alert("Terjadi kesalahan saat menolak laporan.");
                 }
             });
         }
