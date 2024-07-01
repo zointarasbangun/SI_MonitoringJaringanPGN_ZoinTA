@@ -139,101 +139,105 @@
                             {{ session('error') }}
                         </div>
                     @endif
-                    <table class="table table-striped text-center" id="tablecar">
-                        <thead>
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Logo</th>
-                                <th scope="col">Nama Perangkat</th>
-                                <th scope="col">Alamat IP</th>
-                                <th scope="col">status</th>
-                                <th scope="col">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($data as $index => $d)
+                    <div class="table-responsive" style="overflow-x:auto;">
+                        <table class="table table-striped text-center" id="tablecar">
+                            <thead>
                                 <tr>
-                                    <td>{{ intval($index) + 1 }}</td>
-                                    <td>
-                                        @if ($d->user->image)
-                                            <img src="{{ asset('storage/' . $d->user->image) }}" class="img-fluid"
-                                                alt="image" width="30" />
-                                        @else
-                                            <span>No Image</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $d->nama_perangkat }}</td>
-                                    <td> {{ $d->ip_perangkat }}</td>
-                                    <td id="status-{{ $d->id }}">
-                                        @if ($d->status === true)
-                                            <span class="badge bg-success">
-                                                Terhubung
-                                            </span>
-                                        @elseif($d->status == 'waiting')
-                                            <div class="spinner-border text-secondary" role="status">
-                                                <span class="visually-hidden"> </span>
-                                            </div>
-                                        @else
-                                            <span class="badge bg-danger">
-                                                Tidak Terhubung
-                                            </span>
-                                        @endif
-                                    </td>
-                                    @if (Auth::user()->role == 'admin')
-                                        <td>
-                                            <a href="{{ route('editDevice', ['id' => $d->id]) }}"
-                                                class="btn btn-primary"><i class= "fas fa-pen"></i></a>
-                                            <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
-                                                class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
-                                            <a href="{{ route('monitoringlokasi', ['id' => $d->id]) }}"
-                                                class="btn btn-success"><i class= "fa-solid fa-map-location-dot"></i></a>
-                                            {{-- <a href="#" class="btn btn-primary">
-                                        <i class="fa-solid fa-map-location-dot"></i></a> --}}
-                                        </td>
-                                    @elseif(Auth::user()->role == 'teknisi')
-                                        <td>
-                                            <a href="{{ route('teknisi.monitoringlokasi', ['id' => $d->id]) }}"
-                                                class="btn btn-success"> lihat lokasi <i class= "fa-solid fa-map-location-dot"></i></a>
-                                        </td>
-                                    @endif
+                                    <th scope="col">No</th>
+                                    <th scope="col">Logo</th>
+                                    <th scope="col">Nama Perangkat</th>
+                                    <th scope="col">Alamat IP</th>
+                                    <th scope="col">status</th>
+                                    <th scope="col">Aksi</th>
                                 </tr>
-                                <div class="modal fade" id="modal-hapus{{ $d->id }}">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title">Default Modal</h4>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>Apakah Anda yakin ingin menghapus data perangkat
-                                                    <b>{{ $d->nama_perangkat }}</b>
-                                                </p>
-                                            </div>
-                                            <div class="modal-footer justify-content-between">
-                                                <form action="{{ route('deleteDevice', ['id' => $d->id]) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="btn btn-default"
-                                                        data-dismiss="modal">Batal</button>
-                                                    <button type="submit" class="btn btn-primary">Ya,
-                                                        Hapus</button>
+                            </thead>
+                            <tbody>
+                                @foreach ($data as $index => $d)
+                                    <tr>
+                                        <td>{{ intval($index) + 1 }}</td>
+                                        <td>
+                                            @if ($d->user->image)
+                                                <img src="{{ asset('storage/' . $d->user->image) }}" class="img-fluid"
+                                                    alt="image" width="30" />
+                                            @else
+                                                <span>No Image</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $d->nama_perangkat }}</td>
+                                        <td> {{ $d->ip_perangkat }}</td>
+                                        <td id="status-{{ $d->id }}">
+                                            @if ($d->status === true)
+                                                <span class="badge bg-success">
+                                                    Terhubung
+                                                </span>
+                                            @elseif($d->status == 'waiting')
+                                                <div class="spinner-border text-secondary" role="status">
+                                                    <span class="visually-hidden"> </span>
+                                                </div>
+                                            @else
+                                                <span class="badge bg-danger">
+                                                    Tidak Terhubung
+                                                </span>
+                                            @endif
+                                        </td>
+                                        @if (Auth::user()->role == 'admin')
+                                            <td>
+                                                <a href="{{ route('editDevice', ['id' => $d->id]) }}"
+                                                    class="btn btn-primary"><i class= "fas fa-pen"></i></a>
+                                                <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
+                                                    class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
+                                                <a href="{{ route('monitoringlokasi', ['id' => $d->id]) }}"
+                                                    class="btn btn-success"><i
+                                                        class= "fa-solid fa-map-location-dot"></i></a>
+                                                {{-- <a href="#" class="btn btn-primary">
+                                        <i class="fa-solid fa-map-location-dot"></i></a> --}}
+                                            </td>
+                                        @elseif(Auth::user()->role == 'teknisi')
+                                            <td>
+                                                <a href="{{ route('teknisi.monitoringlokasi', ['id' => $d->id]) }}"
+                                                    class="btn btn-success"> lihat lokasi <i
+                                                        class= "fa-solid fa-map-location-dot"></i></a>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                    <div class="modal fade" id="modal-hapus{{ $d->id }}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Default Modal</h4>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Apakah Anda yakin ingin menghapus data perangkat
+                                                        <b>{{ $d->nama_perangkat }}</b>
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer justify-content-between">
+                                                    <form action="{{ route('deleteDevice', ['id' => $d->id]) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-primary">Ya,
+                                                            Hapus</button>
 
-                                                </form>
+                                                    </form>
 
+                                                </div>
                                             </div>
+                                            <!-- /.modal-content -->
                                         </div>
-                                        <!-- /.modal-content -->
+                                        <!-- /.modal-dialog -->
                                     </div>
-                                    <!-- /.modal-dialog -->
-                                </div>
-                                <!-- /.modal -->
-                            @endforeach
-                        </tbody>
-                    </table>
+                                    <!-- /.modal -->
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

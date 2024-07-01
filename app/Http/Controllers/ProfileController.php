@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -98,9 +99,6 @@ class ProfileController extends Controller
             $photoPath = $request->file('image')->store('photos', 'public');
             $validatedData['image'] = $photoPath;
 
-
-
-
         }
         if (empty($request->password)) {
             unset($validatedData['password']);
@@ -168,5 +166,18 @@ class ProfileController extends Controller
         }
 
         return redirect()->route('profileklien')->with('success', 'Data pengguna diperbarui.');
+    }
+
+    public function deleteImage(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->image) {
+            Storage::delete('public/' . $user->image);
+            $user->image = null;
+            $user->save();
+        }
+
+        return redirect()->route('editprofileteknisi')->with('success', 'Foto profil berhasil dihapus.');
     }
 }

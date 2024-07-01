@@ -89,7 +89,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h1 class="card-title"><b>List Perangkat</b></h1>
-                    <a href="{{ route('monitoringlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi
+                    <a href="{{ route('klien.monitoringlokasi', ['id' => auth()->user()->id])  }}" class="btn btn-success ml-auto">Lihat lokasi
                         <i class="fa-solid fa-map-location-dot"></i>
                     </a>
                 </div>

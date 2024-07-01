@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.8",
         "maatwebsite/excel": "*",
         "mpdf/mpdf": "^8.2",
+        "realrashid/sweet-alert": "^7.2",
         "spatie/browsershot": "*"
     },
     "require-dev": {

@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -74,9 +76,10 @@ class HomeController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
+        // Validasi data input
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:users,name',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'kontak' => 'nullable',
             'alamat' => 'nullable',
@@ -88,6 +91,14 @@ class HomeController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        // Jika validasi gagal, kembali ke halaman sebelumnya dengan error
+        if ($validator->fails()) {
+            $errors = $validator->errors()->toJson();
+            return redirect()->back()->with('errors', $errors)->withInput();
+        }
+
+        $validatedData = $validator->validated();
+
         if ($request->hasFile('image')) {
             $photoPath = $request->file('image')->store('photos', 'public');
             $validatedData['image'] = $photoPath;
@@ -98,22 +109,21 @@ class HomeController extends Controller
             'email' => $validatedData['email'],
             'name' => $validatedData['name'],
             'password' => Hash::make($validatedData['password']),
+            'kontak' => $validatedData['kontak'] ?? null,
+            'alamat' => $validatedData['alamat'] ?? null,
+            'tahun_langganan' => $validatedData['tahun_langganan'] ?? null,
+            'latitude' => $validatedData['latitude'] ?? null,
+            'longitude' => $validatedData['longitude'] ?? null,
+            'server_id' => $validatedData['server_id'] ?? null,
+            'role' => $validatedData['role'] ?? null,
+            'image' => $validatedData['image'] ?? null,
         ];
-
-        // Tambahkan data lainnya ke dalam array data pengguna baru
-        $userData['kontak'] = $validatedData['kontak'] ?? null;
-        $userData['alamat'] = $validatedData['alamat'] ?? null;
-        $userData['tahun_langganan'] = $validatedData['tahun_langganan'] ?? null;
-        $userData['latitude'] = $validatedData['latitude'] ?? null;
-        $userData['longitude'] = $validatedData['longitude'] ?? null;
-        $userData['server_id'] = $validatedData['server_id'] ?? null;
-        $userData['role'] = $validatedData['role'] ?? null;
-        $userData['image'] = $validatedData['image'] ?? null;
 
         // Membuat pengguna baru
         $user = User::create($userData);
+
         // Redirect ke halaman dataAkun setelah penyimpanan berhasil
-        return redirect()->route('dataAkun');
+        return redirect()->route('dataAkun')->with('success', 'Akun berhasil ditambahkan.');
     }
 
     public function editAkun($id)
@@ -174,6 +184,7 @@ class HomeController extends Controller
             $user->password = Hash::make($request->password);
             $user->save();
         }
+        Session::flash('dataAkunMessage', 'Data akun tidak ada yang diubah.');
 
         return redirect()->route('dataAkun')->with('success', 'Data pengguna diperbarui.');
     }
@@ -184,7 +195,7 @@ class HomeController extends Controller
         $data = User::findOrFail($id);
         $data->delete();
 
-        return redirect()->route('dataAkun');
+        return redirect()->route('dataAkun')->with('success', 'Akun berhasil dihapus.');
     }
 
     public function tambahAkun()

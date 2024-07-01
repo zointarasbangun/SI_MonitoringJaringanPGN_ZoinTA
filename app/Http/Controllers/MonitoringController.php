@@ -64,22 +64,31 @@ class MonitoringController extends Controller
 
     public function teknisidataMonitoring()
     {
-        $perangkat = Device::whereHas('user', function ($query) {
+        $perangkats = Device::whereHas('user', function ($query) {
             $query->where('role', 'klien');
-        })->get();
+        })->with('user')->get();
 
-        return view('monitoring.perangkatlokasi', compact('perangkat'));
+        foreach ($perangkats as $perangkat) {
+
+            $perangkat->status = 'waiting';
+        }
+
+        return view('monitoring.perangkatlokasi', compact('perangkats'));
     }
 
     public function kliendataMonitoring($id)
     {
-        // Mengambil perangkat yang dimiliki oleh klien dengan ID yang diberikan
-        $perangkat = Device::whereHas('user', function ($query) use ($id) {
-            $query->where('id', $id)->where('role', 'klien');
-        })->get();
+        $perangkats = Device::whereHas('user', function ($query) use ($id) {
+            $query->where('role', 'klien')->where('id', $id);
+        })->with('user')->get();
 
-        return view('monitoring.perangkatlokasi', compact('perangkat'));
+        foreach ($perangkats as $perangkat) {
+            $perangkat->status = 'waiting';
+        }
+
+        return view('monitoring.perangkatlokasi', compact('perangkats'));
     }
+
 
     public function tesPing($alamat_ip)
     {

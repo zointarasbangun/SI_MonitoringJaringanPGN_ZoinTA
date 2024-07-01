@@ -105,7 +105,7 @@
                             @foreach ($log as $index => $d)
                                 <tr>
                                     <td>{{ intval($index) + 1 }}</td>
-                                    <td>{{ $d->teknisi }}</td>
+                                    <td>{{ $d->teknisilog->name }}</td>
                                     <td>{{ $d->serverlog->nama_server }}</td>
                                     <td> {{ $d->userlog->name }}</td>
                                     <td>{{ $d->devicelog->nama_perangkat }}</td>

@@ -124,6 +124,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('teknisi/profileteknisi', [ProfileController::class, 'profileteknisi'])->name('profileteknisi');
         Route::get('teknisi/editprofileteknisi/{id}', [ProfileController::class, 'editprofileteknisi'])->name('editprofileteknisi');
         Route::post('teknisi/updateprofileteknisi/{id}', [ProfileController::class, 'updateprofileteknisi'])->name('updateprofileteknisi');
+        Route::delete('teknisi/profile/deleteimage', [ProfileController::class, 'deleteImage'])->name('deleteimageteknisi');
 
         Route::get('teknisi/downloadpdf', [LogController::class, 'teknisiexport_pdf'])->name('teknisi.downloadpdf');
         Route::get('teknisi/downloadexcel', [LogController::class, 'teknisiexport_excel'])->name('teknisi.downloadexcel');

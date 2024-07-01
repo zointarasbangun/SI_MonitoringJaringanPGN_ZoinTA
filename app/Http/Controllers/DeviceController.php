@@ -7,6 +7,7 @@ use App\Models\Notifikasi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\TelegramService;
+use Illuminate\Support\Facades\Validator;
 
 class DeviceController extends Controller
 {
@@ -30,13 +31,20 @@ class DeviceController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $validator = Validator::make($request->all(), [
             'nama_perangkat' => 'required|string',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'user_id' => 'required|exists:users,id',
             'ip_perangkat' => 'required|string'
         ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors()->toJson();
+            return redirect()->back()->with('errors', $errors)->withInput();
+        }
+
+        $validatedData = $validator->validated();
 
         $deviceData = [
             'nama_perangkat' => $validatedData['nama_perangkat'],
@@ -50,7 +58,7 @@ class DeviceController extends Controller
 
 
         // Redirect ke halaman dataAkun setelah penyimpanan berhasil
-        return redirect()->route('dataDevice');
+        return redirect()->route('dataDevice')->with('success', 'Perangkat berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -72,7 +80,15 @@ class DeviceController extends Controller
             'ip_perangkat' => 'required'
         ]);
 
-        $affectedRows = Device::whereId($id)->update($validatedData);
+        $deviceData = [
+            'nama_perangkat' => $validatedData['nama_perangkat'],
+            'latitude' => $validatedData['latitude'],
+            'longitude' => $validatedData['longitude'],
+            'user_id' => $validatedData['user_id'],
+            'ip_perangkat' => $validatedData['ip_perangkat'],
+        ];
+
+        $affectedRows = Device::whereId($id)->update($deviceData);
 
         if ($affectedRows == 0) {
             return redirect()->back()->with('error', 'Tidak ada perubahan yang disimpan.');
@@ -86,7 +102,7 @@ class DeviceController extends Controller
         $data = Device::findOrFail($id);
         $data->delete();
 
-        return redirect()->route('dataDevice');
+        return redirect()->route('dataDevice')->with('success', 'Perangkat berhasil dihapus.');
     }
 
     public function teknisidataDevice()
@@ -200,5 +216,4 @@ class DeviceController extends Controller
         }
 
     }
-
 }

@@ -67,8 +67,8 @@
                                             <div class="modal-body mx-3">
                                                 <div class="mb-2">
                                                     <i class="mr-3 fa-regular fa-user"></i>
-                                                    <label data-error="wrong" data-success="right"
-                                                        for="teknisi">Nama Teknisi</label>
+                                                    <label data-error="wrong" data-success="right" for="teknisi">Nama
+                                                        Teknisi</label>
                                                     <input type="text" name="teknisi" id="defaultForm-username"
                                                         class="form-control validate" placeholder="Input nama"
                                                         value="{{ Auth::user()->name }}" style="color:black;" readonly>
@@ -375,6 +375,34 @@
         </div>
 
     </div>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                timer: 3000
+            });
+        </script>
+    @endif
+
+    @if (session('errors'))
+        <script>
+            var errors = {!! html_entity_decode(session('errors')) !!};
+            var errorMessage = '';
+
+            // Loop through the errors object and concatenate all error messages
+            for (var key in errors) {
+                errorMessage += errors[key][0] + '<br>';
+            }
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                html: errorMessage
+            });
+        </script>
+    @endif
 @endsection
 
 @section('js')

@@ -15,7 +15,7 @@
                 <!-- Main content -->
                 <section class="content">
                     <div class="container-fluid">
-                        <form method="POST" action="{{ route('updateDevice', ['id' => $device->id]) }}" enctype="multipart/form-data>
+                        <form method="POST" action="{{ route('updateDevice', ['id' => $device->id]) }}" enctype="multipart/form-data">
                             @csrf
                             @method('POST')
                             <div class="card-body">

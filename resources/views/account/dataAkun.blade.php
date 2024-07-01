@@ -177,6 +177,7 @@
                                         <div class="modal-footer d-flex justify-content-center">
                                             <button type="submit" class="btn btn-success">Tambah Klien</button>
                                         </div>
+
                                     </form>
                                 </div>
                             </div>
@@ -192,7 +193,6 @@
                                             style="color: white;">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
-
                                     </div>
                                     <form class="" method="POST"
                                         action="{{ route('addAcount', ['role' => 'teknisi']) }}">
@@ -205,6 +205,7 @@
                                                 <input type="text" name="name" id="defaultForm-username"
                                                     class="form-control validate" placeholder="Input nama"
                                                     style="color:black;">
+
                                             </div>
 
                                             <div class="mb-2">
@@ -223,6 +224,7 @@
                                                 <input type="email" name="email" id="defaultForm-email"
                                                     class="form-control validate" placeholder="Input email"
                                                     style="color:black;">
+
                                             </div>
 
                                             <div class="mb-2">
@@ -242,6 +244,7 @@
                                 </div>
                             </div>
                         </div>
+
 
                         <!-- /modal -->
 
@@ -279,7 +282,7 @@
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Logo</th>
-                                <th scope="col">User</th>
+                                <th scope="col">Nama Akun</th>
                                 <th scope="col">Password</th>
                                 <th scope="col">Role</th>
                                 <th scope="col">Status</th>
@@ -358,6 +361,44 @@
             </div>
         </div>
     </div>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                timer: 3000
+            });
+        </script>
+    @endif
+
+    @if (session('errors'))
+        <script>
+            var errors = {!! html_entity_decode(session('errors')) !!};
+            var errorMessage = '';
+
+            // Loop through the errors object and concatenate all error messages
+            for (var key in errors) {
+                errorMessage += errors[key][0] + '<br>';
+            }
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                html: errorMessage
+            });
+        </script>
+    @endif
     <!-- /.card-body -->
     <!-- /.container-fluid -->
+@endsection
+
+@section('js')
+    @if (session('modal') == 'show')
+        <script>
+            $(document).ready(function() {
+                $('#modalLoginTeknisi').modal('show');
+            });
+        </script>
+    @endif
 @endsection

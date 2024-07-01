@@ -84,6 +84,16 @@
                                 </select>
                             </div>
 
+                            <div class="form-group text-light">
+                                <label for="current_image" style="color: white;">Current Image<label><br>
+                                        @if ($user->image)
+                                            <img src="{{ asset('storage/' . $user->image) }}" alt="Current Image"
+                                                style="max-width: 200px;">
+                                        @else
+                                            <span>No Image</span>
+                                        @endif
+                            </div>
+
                             <div class="form-group">
                                 <label for="exampleInputimage" style="color: white;">Logo</label>
                                 <input type="file" name="image" class="form-control" id="image"

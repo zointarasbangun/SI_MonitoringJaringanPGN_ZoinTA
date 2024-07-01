@@ -24,7 +24,8 @@
                                     <label data-error="wrong" data-success="right" for="defaultForm-server">Nama
                                         Server</label>
                                     <input type="text" name="nama_server" id="defaultForm-username"
-                                        class="form-control validate" placeholder="Input nama server" value="{{ $server->nama_server }}">
+                                        class="form-control validate" placeholder="Input nama server"
+                                        value="{{ $server->nama_server }}">
                                 </div>
 
                                 <div class="mb-2 text-light">
@@ -32,7 +33,8 @@
                                     <label data-error="wrong" data-success="right"
                                         for="defaultForm-latitude">Latitude</label>
                                     <input type="number" step=any name="latitude" id="defaultForm-latitude"
-                                        class="form-control validate" placeholder="Input Latitude (contoh: -6.1754)"value="{{ $server->latitude }}">
+                                        class="form-control validate"
+                                        placeholder="Input Latitude (contoh: -6.1754)"value="{{ $server->latitude }}">
                                 </div>
 
                                 <div class="mb-2 text-light">
@@ -40,14 +42,20 @@
                                     <label data-error="wrong" data-success="right"
                                         for="defaultForm-longitude">Longitude</label>
                                     <input type="number" step=any name="longitude" id="defaultForm-latitude"
-                                        class="form-control validate" placeholder="Input Longitude (contoh: 111.1754)"value="{{ $server->longitude }}">
+                                        class="form-control validate"
+                                        placeholder="Input Longitude (contoh: 111.1754)"value="{{ $server->longitude }}">
                                 </div>
                             </div>
 
                             <!-- /.card-body -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-success">Save Changes</button>
-                                <a href="{{ route('dataAkun') }}" class="btn btn-danger">Cancel</a>
+                                <a href="{{ route('dataServer') }}" class="btn btn-danger">Cancel</a>
+                                @if (session('dataServerMessage'))
+                                    <div class="alert alert-warning">
+                                        {{ session('dataServerMessage') }}
+                                    </div>
+                                @endif
                             </div>
 
                         </form>

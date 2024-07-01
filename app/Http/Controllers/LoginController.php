@@ -34,7 +34,7 @@ class LoginController extends Controller
 
     public function logout(){
         Auth::logout();
-        return redirect()->route('login')->with('succes',' kamu berhasil logout');
+        return redirect()->route('login')->with('succes',' anda berhasil logout');
     }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class TelegramService
 {
@@ -11,22 +12,36 @@ class TelegramService
 
     public function __construct()
     {
-        $this->botToken = env('TELEGRAM_BOT_TOKEN');
-        $this->chatId = env('TELEGRAM_CHANNEL_ID');
+        $this->botToken = config('services.telegram.bot_token');
+        $this->chatId = config('services.telegram.channel_id');
+
+        Log::info('Bot Token from config: ' . $this->botToken);
+        Log::info('Chat ID from config: ' . $this->chatId);
     }
+
+
 
     public function sendMessage($message)
     {
         $client = new Client();
         $url = "https://api.telegram.org/bot{$this->botToken}/sendMessage";
 
-        $response = $client->post($url, [
-            'form_params' => [
-                'chat_id' => $this->chatId,
-                'text' => $message
-            ]
-        ]);
+        // Log the URL to make sure it is correct
+        Log::info('Telegram URL: ' . $url);
 
-        return $response;
+        try {
+            $response = $client->post($url, [
+                'form_params' => [
+                    'chat_id' => $this->chatId,
+                    'text' => $message
+                ]
+            ]);
+
+            return $response;
+        } catch (\Exception $e) {
+            // Log the error message
+            Log::error('Error sending message to Telegram: ' . $e->getMessage());
+            return null;
+        }
     }
 }

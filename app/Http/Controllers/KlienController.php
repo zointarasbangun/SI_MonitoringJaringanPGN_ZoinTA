@@ -22,7 +22,7 @@ class KlienController extends Controller
 
     public function tambahKlien(Request $request)
     {
-        $validatedData = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
@@ -35,6 +35,14 @@ class KlienController extends Controller
             'role' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors()->toJson();
+            return redirect()->back()->with('errors', $errors)->withInput();
+        }
+
+        $validatedData = $validator->validated();
+
         if ($request->hasFile('image')) {
             $photoPath = $request->file('image')->store('photos', 'public');
             $validatedData['image'] = $photoPath;
@@ -83,7 +91,7 @@ class KlienController extends Controller
         // Membuat pengguna baru
         $user = User::create($userData);
         // Redirect ke halaman dataAkun setelah penyimpanan berhasil
-        return redirect()->route('dataKlien');
+        return redirect()->route('dataKlien')->with('success', 'Klien berhasil ditambahkan.');
     }
 
     public function editKlien(Request $request, $id)
@@ -154,7 +162,7 @@ class KlienController extends Controller
         $data = User::findOrFail($id);
         $data->delete();
 
-        return redirect()->route('dataKlien');
+        return redirect()->route('dataKlien')->with('success', 'Klien berhasil dihapus.');
     }
 
     public function teknisidataKlien()

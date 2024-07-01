@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Mpdf\Mpdf;
 
@@ -123,17 +124,20 @@ class LogController extends Controller
         $validatedData = $request->validate([
             'teknisi' => 'required', // Sesuaikan dengan kebutuhan Anda
             'teknisi_id' => 'nullable', // Sesuaikan dengan kebutuhan Anda
-            'user_id' => 'nullable', // Sesuaikan dengan kebutuhan Anda
-            'server_id' => 'nullable', // Sesuaikan dengan kebutuhan Anda
-            'device_id' => 'nullable', // Sesuaikan dengan kebutuhan Anda
+            'user_id' => 'required', // Sesuaikan dengan kebutuhan Anda
+            'server_id' => 'required', // Sesuaikan dengan kebutuhan Anda
+            'device_id' => 'required', // Sesuaikan dengan kebutuhan Anda
             'tanggal' => 'required|date',
-            'judul' => 'nullable', // Sesuaikan dengan kebutuhan Anda
+            'judul' => 'required', // Sesuaikan dengan kebutuhan Anda
             'keterangan' => 'nullable', // Sesuaikan dengan kebutuhan Anda
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
         if ($request->hasFile('foto')) {
             $photoPath = $request->file('foto')->store('photos', 'public');
             $validatedData['foto'] = $photoPath;
+        } else {
+            $validatedData['foto'] = null; // Beri nilai default null jika tidak ada foto yang diunggah
         }
         // Membuat instance LogPerbaikan baru dengan data yang divalidasi
         $logPerbaikan = new LogPerbaikan();
@@ -150,7 +154,7 @@ class LogController extends Controller
         // Simpan log perbaikan
         $logPerbaikan->save();
 
-        return redirect()->route('teknisi.statuslog'); // Sesuaikan dengan route yang Anda miliki
+        return redirect()->route('teknisi.statuslog')->with('success', 'Log perbaikan berhasil ditambahkan.'); // Sesuaikan dengan route yang Anda miliki
     }
 
     public function editlog($id)
@@ -166,13 +170,9 @@ class LogController extends Controller
         return view('logperbaikan.editlog', compact('log', 'user', 'server', 'device', 'namaTeknisi'));
     }
 
-    public function updatelog($id)
+    public function updatelog(Request $request, $id)
     {
-        // 1. Ambil data log berdasarkan ID
-        $log = LogPerbaikan::findOrFail($id);
-
-        // 2. Validasi data dari permintaan
-        $validatedData = request()->validate([
+        $validatedData = $request->validate([
             'teknisi' => 'required',
             'user_id' => 'required',
             'server_id' => 'required',
@@ -180,17 +180,26 @@ class LogController extends Controller
             'tanggal' => 'required|date',
             'judul' => 'nullable',
             'keterangan' => 'nullable',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5000',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+        $log = LogPerbaikan::findOrFail($id);
 
-        // 3. Lakukan pembaruan data log
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama jika ada
+            if ($log->foto) {
+                Storage::disk('public')->delete($log->foto);
+            }
+
+            // Simpan foto baru
+            $photoPath = $request->file('foto')->store('photos', 'public');
+            $validatedData['foto'] = $photoPath;
+        }
+
         $log->update($validatedData);
 
-        // 4. Simpan perubahan
         $log->save();
 
-        // 5. Redirect pengguna ke halaman atau rute yang sesuai
-        return redirect()->route('teknisi.statuslog')->with('success', 'Log berhasil diperbarui.');
+        return redirect()->route('datalog')->with('success', 'Log berhasil diperbarui.');
     }
 
     public function teknisieditlog($id)
@@ -205,13 +214,11 @@ class LogController extends Controller
         // Mengembalikan view 'admin.editAkun' dan menyertakan data user
         return view('logperbaikan.editlog', compact('log', 'user', 'server', 'device', 'namaTeknisi'));
     }
-    public function teknisiupdatelog($id)
+    public function teknisiupdatelog(Request $request, $id)
     {
-        // 1. Ambil data log berdasarkan ID
-        $log = LogPerbaikan::findOrFail($id);
 
         // 2. Validasi data dari permintaan
-        $validatedData = request()->validate([
+        $validatedData = $request->validate([
             'teknisi' => 'required',
             'user_id' => 'required',
             'server_id' => 'required',
@@ -222,10 +229,21 @@ class LogController extends Controller
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5000',
         ]);
 
-        // 3. Lakukan pembaruan data log
+        $log = LogPerbaikan::findOrFail($id);
+
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama jika ada
+            if ($log->foto) {
+                Storage::disk('public')->delete($log->foto);
+            }
+
+            // Simpan foto baru
+            $photoPath = $request->file('foto')->store('photos', 'public');
+            $validatedData['foto'] = $photoPath;
+        }
+
         $log->update($validatedData);
 
-        // 4. Simpan perubahan
         $log->save();
 
         // 5. Redirect pengguna ke halaman atau rute yang sesuai
@@ -244,7 +262,7 @@ class LogController extends Controller
         $data = logperbaikan::findOrFail($id);
         $data->delete();
 
-        return redirect()->route('teknisi.statuslog');
+        return redirect()->route('teknisi.statuslog')->with('success', 'Log perbaikan berhasil dihapus.');
     }
 
     public function teknisiriwayatlog()

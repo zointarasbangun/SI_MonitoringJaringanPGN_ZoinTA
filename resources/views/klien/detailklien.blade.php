@@ -207,102 +207,104 @@
                         {{ session('error') }}
                     </div>
                 @endif
-                <table class="table table-striped text-center" id="tablecar">
-                    <thead>
+                <div class="table-responsive" style="overflow-x:auto;">
+                    <table class="table table-striped text-center" id="tablecar">
                         <thead>
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Logo</th>
-                                <th scope="col">Nama Klien</th>
-                                <th scope="col">Kontak</th>
-                                <th scope="col">Alamat</th>
-                                <th scope="col">Server</th>
-                                <th scope="col">Perangkat</th>
-                                <th scope="col">Aksi</th>
-                            </tr>
-                        </thead>
-                    <tbody>
-                        @foreach ($data as $d)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>
-                                    @if ($d->image)
-                                        <img src="{{ asset('storage/' . $d->image) }}" class="img-fluid" alt="image"
-                                            width="30" />
-                                    @else
-                                        <span>No Image</span>
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Logo</th>
+                                    <th scope="col">Nama Klien</th>
+                                    <th scope="col">Kontak</th>
+                                    <th scope="col">Alamat</th>
+                                    <th scope="col">Server</th>
+                                    <th scope="col">Perangkat</th>
+                                    <th scope="col">Aksi</th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                            @foreach ($data as $d)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        @if ($d->image)
+                                            <img src="{{ asset('storage/' . $d->image) }}" class="img-fluid" alt="image"
+                                                width="30" />
+                                        @else
+                                            <span>No Image</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $d->name }}</td>
+                                    <td>{{ $d->kontak }}</td>
+                                    <td>{{ $d->alamat }}</td>
+                                    <td>{{ $d->server->nama_server }}</td>
+                                    @if (Auth::user()->role == 'admin')
+                                        <td>
+                                            <a href="{{ route('detailDevice', ['id' => $d->id]) }}"
+                                                class="btn btn-info">{{ $d->device->count() }} <i
+                                                    class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+
+                                            <a href="{{ route('editKlien', ['id' => $d->id]) }}" class="btn btn-primary"><i
+                                                    class= "fas fa-pen"></i></a>
+                                            <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
+                                                class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
+                                            <a href="{{ route('editKlien', ['id' => $d->id]) }}" class="btn btn-success"><i
+                                                    class= "fa-solid fa-map-location-dot"></i></a>
+                                        </td>
+                                    @elseif(Auth::user()->role == 'teknisi')
+                                        <td>
+                                            <a href="{{ route('teknisi.detailDevice', ['id' => $d->id]) }}"
+                                                class="btn btn-info">{{ $d->device->count() }} <i
+                                                    class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('teknisi.klienlokasi', ['id' => $d->id]) }}"
+                                                class="btn btn-success">Lihat lokasi <i
+                                                    class= "fa-solid fa-map-location-dot"></i></a>
+                                        </td>
                                     @endif
-                                </td>
-                                <td>{{ $d->name }}</td>
-                                <td>{{ $d->kontak }}</td>
-                                <td>{{ $d->alamat }}</td>
-                                <td>{{ $d->server->nama_server }}</td>
-                                @if (Auth::user()->role == 'admin')
-                                    <td>
-                                        <a href="{{ route('detailDevice', ['id' => $d->id]) }}"
-                                            class="btn btn-info">{{ $d->device->count() }} <i
-                                                class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
-                                        </a>
-                                    </td>
-                                    <td>
+                                </tr>
+                                <div class="modal fade" id="modal-hapus{{ $d->id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Default Modal</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Apakah Anda yakin ingin menghapus data user
+                                                    <b>{{ $d->nama }}</b>
+                                                </p>
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <form action="{{ route('deleteKlien', ['id' => $d->id]) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-primary">Ya,
+                                                        Hapus</button>
 
-                                        <a href="{{ route('editKlien', ['id' => $d->id]) }}" class="btn btn-primary"><i
-                                                class= "fas fa-pen"></i></a>
-                                        <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
-                                            class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
-                                        <a href="{{ route('editKlien', ['id' => $d->id]) }}" class="btn btn-success"><i
-                                                class= "fa-solid fa-map-location-dot"></i></a>
-                                    </td>
-                                @elseif(Auth::user()->role == 'teknisi')
-                                    <td>
-                                        <a href="{{ route('teknisi.detailDevice', ['id' => $d->id]) }}"
-                                            class="btn btn-info">{{ $d->device->count() }} <i
-                                                class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('teknisi.klienlokasi', ['id' => $d->id]) }}"
-                                            class="btn btn-success">Lihat lokasi <i
-                                                class= "fa-solid fa-map-location-dot"></i></a>
-                                    </td>
-                                @endif
-                            </tr>
-                            <div class="modal fade" id="modal-hapus{{ $d->id }}">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Default Modal</h4>
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Apakah Anda yakin ingin menghapus data user
-                                                <b>{{ $d->nama }}</b>
-                                            </p>
-                                        </div>
-                                        <div class="modal-footer justify-content-between">
-                                            <form action="{{ route('deleteKlien', ['id' => $d->id]) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-default"
-                                                    data-dismiss="modal">Batal</button>
-                                                <button type="submit" class="btn btn-primary">Ya,
-                                                    Hapus</button>
+                                                </form>
 
-                                            </form>
-
+                                            </div>
                                         </div>
+                                        <!-- /.modal-content -->
                                     </div>
-                                    <!-- /.modal-content -->
+                                    <!-- /.modal-dialog -->
                                 </div>
-                                <!-- /.modal-dialog -->
-                            </div>
-                            <!-- /.modal -->
-                        @endforeach
-                    </tbody>
-                </table>
+                                <!-- /.modal -->
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
                 <!-- /.card-body -->
 
             </div>

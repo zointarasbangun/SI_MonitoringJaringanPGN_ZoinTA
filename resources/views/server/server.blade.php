@@ -61,6 +61,7 @@
                                                         Server</label>
                                                     <input type="text" name="nama_server" id="defaultForm-username"
                                                         class="form-control validate" placeholder="Input nama server">
+
                                                 </div>
 
                                                 <div class="mb-2">
@@ -70,6 +71,7 @@
                                                     <input type="number" step=any name="latitude" id="defaultForm-latitude"
                                                         class="form-control validate"
                                                         placeholder="Input Latitude (contoh: -6.1754)">
+
                                                 </div>
 
                                                 <div class="mb-2">
@@ -79,6 +81,7 @@
                                                     <input type="number" step=any name="longitude"
                                                         id="defaultForm-latitude" class="form-control validate"
                                                         placeholder="Input Longitude (contoh: 111.1754)">
+
                                                 </div>
 
                                             </div>
@@ -101,14 +104,14 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h1 class="card-title"><b>List Server</b></h1>
-                    @if(Auth::user()->role == 'admin')
-                    <a href="{{ route('serverlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi server
-                        <i class="fa-solid fa-map-location-dot"></i>
-                    </a>
+                    @if (Auth::user()->role == 'admin')
+                        <a href="{{ route('serverlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi server
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </a>
                     @else
-                    <a href="{{ route('teknisi.serverlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi server
-                        <i class="fa-solid fa-map-location-dot"></i>
-                    </a>
+                        <a href="{{ route('teknisi.serverlokasi') }}" class="btn btn-success ml-auto">Lihat lokasi server
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </a>
                     @endif
                 </div>
                 <!-- table -->
@@ -123,94 +126,126 @@
                         {{ session('error') }}
                     </div>
                 @endif
-                <table class="table table-striped text-center" id="tablecar">
-                    <thead>
-                        <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Nama server</th>
-                            <th scope="col">Jumlah Klien</th>
-                            @if(Auth::user()->role == 'admin')
-                            <th scope="col">Aksi</th>
-                            @endif
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($server as $index => $d)
+                <div class="table-responsive" style="overflow-x:auto;">
+                    <table class="table table-striped text-center" id="tablecar">
+                        <thead>
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $d->nama_server }}</td>
+                                <th scope="col">No</th>
+                                <th scope="col">Nama server</th>
+                                <th scope="col">Jumlah Klien</th>
                                 @if (Auth::user()->role == 'admin')
-                                    <td>
-                                        <a href="{{ route('detailKlien', ['id' => $d->id]) }}"
-                                            class="btn btn-info">{{ $d->users->count() }} <i
-                                                class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
-                                        </a>
-                                    </td>
+                                    <th scope="col">Aksi</th>
+                                @endif
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($server as $index => $d)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $d->nama_server }}</td>
+                                    @if (Auth::user()->role == 'admin')
+                                        <td>
+                                            <a href="{{ route('detailKlien', ['id' => $d->id]) }}"
+                                                class="btn btn-info">{{ $d->users->count() }} <i
+                                                    class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
+                                            </a>
+                                        </td>
 
-                                    <td>
-                                        <a href="{{ route('editServer', ['id' => $d->id]) }}" class="btn btn-primary"><i
-                                                class= "fas fa-pen"></i></a>
-                                        <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
-                                            class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
-                                        {{-- <a href="{{ route('serverlokasi', ['id' => $d->id]) }}"
+                                        <td>
+                                            <a href="{{ route('editServer', ['id' => $d->id]) }}"
+                                                class="btn btn-primary"><i class= "fas fa-pen"></i></a>
+                                            <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}"
+                                                class="btn btn-danger"><i class= "fas fa-trash-alt"></i></a>
+                                            {{-- <a href="{{ route('serverlokasi', ['id' => $d->id]) }}"
                                             class="btn btn-success"><i class= "fa-solid fa-map-location-dot"></i></a> --}}
-                                        {{-- <a href="#" class="btn btn-primary">
+                                            {{-- <a href="#" class="btn btn-primary">
                                         <i class="fa-solid fa-map-location-dot"></i></a> --}}
-                                    </td>
-                                @elseif(Auth::user()->role == 'teknisi')
-                                    <td>
-                                        <a href="{{ route('teknisi.detailKlien', ['id' => $d->id]) }}"
-                                            class="btn btn-info">{{ $d->users->count() }} <i
-                                                class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
-                                        </a>
-                                    </td>
-                                    {{-- <td>
+                                        </td>
+                                    @elseif(Auth::user()->role == 'teknisi')
+                                        <td>
+                                            <a href="{{ route('teknisi.detailKlien', ['id' => $d->id]) }}"
+                                                class="btn btn-info">{{ $d->users->count() }} <i
+                                                    class="iconify nav-icon ml-auto" data-icon="bxs:detail"></i>
+                                            </a>
+                                        </td>
+                                        {{-- <td>
                                         <a href="{{ route('teknisi.serverlokasi', ['id' => $d->id]) }}"
                                             class="btn btn-success">Lihat lokasi <i
                                                 class= "fa-solid fa-map-location-dot"></i></a>
                                     </td> --}}
-                                @endif
+                                    @endif
 
-                            </tr>
-                            <div class="modal fade" id="modal-hapus{{ $d->id }}">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Default Modal</h4>
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Apakah Anda yakin ingin menghapus 
-                                                <b>{{ $d->nama_server }}</b>
-                                            </p>
-                                        </div>
-                                        <div class="modal-footer justify-content-between">
-                                            <form action="{{ route('deleteServer', ['id' => $d->id]) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-default"
-                                                    data-dismiss="modal">Batal</button>
-                                                <button type="submit" class="btn btn-primary">Ya,
-                                                    Hapus</button>
+                                </tr>
+                                <div class="modal fade" id="modal-hapus{{ $d->id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Default Modal</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Apakah Anda yakin ingin menghapus
+                                                    <b>{{ $d->nama_server }}</b>
+                                                </p>
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <form action="{{ route('deleteServer', ['id' => $d->id]) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-primary">Ya,
+                                                        Hapus</button>
 
-                                            </form>
+                                                </form>
 
+                                            </div>
                                         </div>
+                                        <!-- /.modal-content -->
                                     </div>
-                                    <!-- /.modal-content -->
+                                    <!-- /.modal-dialog -->
                                 </div>
-                                <!-- /.modal-dialog -->
-                            </div>
-                            <!-- /.modal -->
-                        @endforeach
-                    </tbody>
-                </table>
+                                <!-- /.modal -->
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                timer: 3000
+            });
+        </script>
+    @endif
+
+    @if (session('errors'))
+        <script>
+            var errors = {!! html_entity_decode(session('errors')) !!};
+            var errorMessage = '';
+
+            // Loop through the errors object and concatenate all error messages
+            for (var key in errors) {
+                errorMessage += errors[key][0] + '<br>';
+            }
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                html: errorMessage
+            });
+        </script>
+    @endif
     <!-- /.card-body -->
     <!-- /.container-fluid -->
 @endsection

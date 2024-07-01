@@ -50,6 +50,10 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    @include('sweetalert::alert')
 
     @yield('styles')
 
@@ -134,31 +138,31 @@
 
                 <!-- Notif -->
                 @if (Auth::user()->role == 'admin')
-                <li class="nav-item dropdown mr-4">
-                    <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
-                        <i class="far fa-bell"></i>
-                        @if (isset($notifikasiCount) && $notifikasiCount > 0)
-                            <span class="badge badge-warning">{{ $notifikasiCount }}</span>
-                        @endif
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        @if (isset($notifikasiTerbaru) && $notifikasiTerbaru->count() > 0)
-                            @foreach ($notifikasiTerbaru as $notifikasi)
+                    <li class="nav-item dropdown mr-4">
+                        <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
+                            <i class="far fa-bell"></i>
+                            @if (isset($notifikasiCount) && $notifikasiCount > 0)
+                                <span class="badge badge-warning">{{ $notifikasiCount }}</span>
+                            @endif
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            @if (isset($notifikasiTerbaru) && $notifikasiTerbaru->count() > 0)
+                                @foreach ($notifikasiTerbaru as $notifikasi)
+                                    <div class="dropdown-divider"></div>
+                                    <a href="{{ route('notifikasi') }}" class="dropdown-item">
+                                        <i class="fas fa-envelope mr-2"></i> <span class="badge bg-danger">
+                                            {{ $notifikasi->message }}
+                                        </span>
+                                        <span
+                                            class="float-right text-muted text-sm">{{ $notifikasi->created_at->diffForHumans() }}</span>
+                                    </a>
+                                @endforeach
+                            @else
                                 <div class="dropdown-divider"></div>
-                                <a href="{{ route('notifikasi') }}" class="dropdown-item">
-                                    <i class="fas fa-envelope mr-2"></i> <span class="badge bg-danger">
-                                        {{ $notifikasi->message }}
-                                    </span>
-                                    <span
-                                        class="float-right text-muted text-sm">{{ $notifikasi->created_at->diffForHumans() }}</span>
-                                </a>
-                            @endforeach
-                        @else
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item text-center">Tidak ada notifikasi</a>
-                        @endif
-                    </div>
-                </li>
+                                <a href="#" class="dropdown-item text-center">Tidak ada notifikasi</a>
+                            @endif
+                        </div>
+                    </li>
                     <!-- /Notif -->
 
                     <!-- Profile -->
@@ -190,31 +194,31 @@
 
                     </li>
                 @elseif(Auth::user()->role == 'teknisi')
-                <li class="nav-item dropdown mr-4">
-                    <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
-                        <i class="far fa-bell"></i>
-                        @if (isset($notifikasiCount) && $notifikasiCount > 0)
-                            <span class="badge badge-warning">{{ $notifikasiCount }}</span>
-                        @endif
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        @if (isset($notifikasiTerbaru) && $notifikasiTerbaru->count() > 0)
-                            @foreach ($notifikasiTerbaru as $notifikasi)
+                    <li class="nav-item dropdown mr-4">
+                        <a class="nav-link rounded-circle" data-toggle="dropdown" href="#">
+                            <i class="far fa-bell"></i>
+                            @if (isset($notifikasiCount) && $notifikasiCount > 0)
+                                <span class="badge badge-warning">{{ $notifikasiCount }}</span>
+                            @endif
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            @if (isset($notifikasiTerbaru) && $notifikasiTerbaru->count() > 0)
+                                @foreach ($notifikasiTerbaru as $notifikasi)
+                                    <div class="dropdown-divider"></div>
+                                    <a href="{{ route('teknisi.notifikasi') }}" class="dropdown-item">
+                                        <i class="fas fa-envelope mr-2"></i> <span class="badge bg-danger">
+                                            {{ $notifikasi->message }}
+                                        </span>
+                                        <span
+                                            class="float-right text-muted text-sm">{{ $notifikasi->created_at->diffForHumans() }}</span>
+                                    </a>
+                                @endforeach
+                            @else
                                 <div class="dropdown-divider"></div>
-                                <a href="{{ route('teknisi.notifikasi') }}" class="dropdown-item">
-                                    <i class="fas fa-envelope mr-2"></i> <span class="badge bg-danger">
-                                        {{ $notifikasi->message }}
-                                    </span>
-                                    <span
-                                        class="float-right text-muted text-sm">{{ $notifikasi->created_at->diffForHumans() }}</span>
-                                </a>
-                            @endforeach
-                        @else
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item text-center">Tidak ada notifikasi</a>
-                        @endif
-                    </div>
-                </li>
+                                <a href="#" class="dropdown-item text-center">Tidak ada notifikasi</a>
+                            @endif
+                        </div>
+                    </li>
                     <!-- /Notif -->
 
                     <!-- Profile -->
@@ -383,6 +387,22 @@
             console.error("Service workers are not supported.");
         }
     </script>
+
+    <script>
+        @if (Session::has('success'))
+            Swal.fire({
+                icon: 'success',
+                title: '{{ Session::get('success') }}',
+            });
+        @elseif (Session::has('error'))
+            Swal.fire({
+                icon: 'error',
+                title: '{{ Session::get('error') }}',
+            });
+        @endif
+    </script>
+
+
     @yield('js')
 </body>
 

@@ -111,7 +111,7 @@
                             <!-- File input for new image -->
                             <div class="form-group">
                                 <label for="foto" style="color: white;">New Foto</label>
-                                <input type="file" name="foto" class="form-control" id="foto" accept="foto/*">
+                                <input type="file" name="foto" class="form-control validate" id="foto" accept="foto/*">
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-center">

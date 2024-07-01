@@ -86,23 +86,27 @@
                                         </option>
                                     </select>
                                 </div>
-                                    <!-- Your existing form fields -->
-                                    <!-- Image preview -->
-                                    <div class="form-group text-light">
-                                        <label for="current_image" style="color: white;">Current Image</label><br>
-                                        @if ($user->image)
-                                            <img src="{{ asset('storage/' . $user->image) }}" alt="Current Image"
-                                                style="max-width: 200px;">
-                                        @else
-                                            <span>No Image</span>
-                                        @endif
-                                    </div>
-                                    <!-- File input for new image -->
-                                    <div class="form-group">
-                                        <label for="image" style="color: white;">New Image</label>
-                                        <input type="file" name="image" class="form-control" id="image"
-                                            accept="image/*">
-                                    </div>
+                                <!-- Your existing form fields -->
+                                <!-- Image preview -->
+                                <div class="form-group text-light">
+                                    <label for="current_image" style="color: white;">Current Image<label><br>
+                                            @if ($user->image)
+                                                <img src="{{ asset('storage/' . $user->image) }}" alt="Current Image"
+                                                    style="max-width: 200px;">
+                                            @else
+                                                <span>No Image</span>
+                                            @endif
+                                </div>
+                                <!-- File input for new image -->
+                                <div class="form-group">
+                                    <label for="image" style="color: white;">New Image</label>
+                                    <small class="form-text text-light" style="color: white;">
+                                        Tipe file yang diterima: jpeg, jpg, png, gif. Maximum file size: 2MB.
+                                    </small>
+                                    <input type="file" name="image" class="form-control" id="image"
+                                        accept="image/*">
+
+                                </div>
 
                                 <div class="form-group">
                                     <label for="role" style="color: white;">Role</label>
@@ -128,6 +132,11 @@
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-success">Save Changes</button>
                                 <a href="{{ route('dataAkun') }}" class="btn btn-danger">Cancel</a>
+                                @if (session('dataAkunMessage'))
+                                    <div class="alert alert-warning">
+                                        {{ session('dataAkunMessage') }}
+                                    </div>
+                                @endif
                             </div>
 
                         </form>
